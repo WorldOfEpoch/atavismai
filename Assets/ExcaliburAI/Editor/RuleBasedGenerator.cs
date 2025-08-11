@@ -62,6 +62,15 @@ namespace ExcaliburAI.Editor
                 // placeholder icon
                 asset.Icon = MakePlaceholderIcon(name, rng);
 
+                var settings = AiSettingsUtil.LoadOrCreate();
+                var iconDir = settings.atavismMode ? settings.atavismIconsFolder
+                                   : "Assets/ExcaliburAI/Generated/Icons";
+                Directory.CreateDirectory(iconDir);
+                var path = $"{iconDir}/{Sanitize(name)}.png";
+                File.WriteAllBytes(path, asset.Icon.texture.EncodeToPNG());
+                AssetDatabase.ImportAsset(path);
+                asset.Icon = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+
                 var path = $"{outDir}/{Sanitize(name)}.asset";
                 AssetDatabase.CreateAsset(asset, AssetDatabase.GenerateUniqueAssetPath(path));
             }
