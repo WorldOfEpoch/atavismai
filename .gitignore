@@ -1,0 +1,19 @@
+# Ignore everything by default
+*
+
+# Keep folder structure
+!*/
+
+# Allow only these file types anywhere
+!*.cs
+!*.meta
+!*.json
+!*.xml
+!*.txt
+!*.md
+
+# Always keep the ignore file and README
+!.gitignore
+!README.md
+*.meta
+/Library
