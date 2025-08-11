@@ -17,3 +17,9 @@
 !README.md
 *.meta
 /Library
+
+# Block VS/IDE caches & logs
+.vs/
+.vscode/
+.idea/
+*.log
