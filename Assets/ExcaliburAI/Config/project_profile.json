@@ -1,0 +1,16 @@
+{
+    "projectName": "World of Epoch",
+    "genre": "High Fantasy",
+    "allowedRaces": [
+        "Human",
+        "Elf",
+        "Orc",
+        "Dwarf"
+    ],
+    "allowedClasses": [],
+    "tone": "Heroic, cohesive, PG-13, lore-driven",
+    "namingStyle": "Concise, evocative, no memes.",
+    "restrictToAllowedRaces": true,
+    "requireDBAwareness": true,
+    "worldSummary": "Ancient forges, frontier realms, factions vying for power."
+}

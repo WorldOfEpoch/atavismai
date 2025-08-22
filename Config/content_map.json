@@ -1,0 +1,92 @@
+{
+  "items": {
+    "table": "world_content.item_templates",
+    "keys": [
+      "id"
+    ],
+    "columns": {
+      "id": "id",
+      "name": "name",
+      "displayName": null,
+      "rarity": "itemQuality",
+      "levelReq": null,
+      "itemType": "category",
+      "icon": "icon",
+      "sellable": "sellable",
+      "vendorId": null,
+      "contentUid": null
+    }
+  },
+  "drops": {
+    "table": "world_content.loot_table_items",
+    "columns": {
+      "tableId": "loot_table_id",
+      "itemId": null,
+      "chance": "chance",
+      "min": null,
+      "max": "count_max"
+    }
+  },
+  "vendors": {
+    "table": "admin.player_shop_items",
+    "columns": {
+      "vendorId": null,
+      "itemId": "template_id",
+      "price": "price",
+      "currency": "currency"
+    }
+  },
+  "skills": {
+    "table": "world_content.skills",
+    "keys": [
+      "id"
+    ],
+    "columns": {
+      "id": "id",
+      "name": "name",
+      "displayName": null,
+      "icon": "icon",
+      "school": null,
+      "contentUid": null
+    }
+  },
+  "quests": {
+    "quests": {
+      "table": "world_content.quests",
+      "columns": {
+        "id": "id",
+        "name": "name",
+        "displayName": null,
+        "giverNpcId": null,
+        "reqLevel": null,
+        "contentUid": null
+      }
+    },
+    "objectives": {
+      "table": "world_content.quest_objectives",
+      "columns": {
+        "questId": null,
+        "kind": "objectiveType",
+        "targetId": null,
+        "count": "targetCount"
+      }
+    },
+    "rewards": {
+      "table": "world_content.level_xp_requirements_rewards",
+      "columns": {
+        "questId": null,
+        "itemId": null,
+        "xp": null,
+        "currency": null,
+        "amount": "reward_amount"
+      }
+    }
+  },
+  "mobs": {
+    "table": "world_content.mob_behavior_profile",
+    "columns": {
+      "id": "id",
+      "name": "name"
+    }
+  }
+}

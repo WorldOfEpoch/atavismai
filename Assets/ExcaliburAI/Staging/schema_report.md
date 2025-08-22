@@ -1,0 +1,3232 @@
+# Atavism Schema Report
+
+## Schema `admin`
+- **account**
+  - id : bigint (PK)
+  - username : varchar
+  - status : int
+  - created : timestamp
+  - last_login : timestamp
+  - character_slots : int
+  - coin_current : int
+  - coin_total : int
+  - coin_used : int
+  - islands_available : int
+  - last_logout : timestamp
+- **account_character**
+  - characterId : bigint (PK)
+  - characterName : varchar
+  - accountId : bigint
+- **account_purchases**
+  - id : int (PK)
+  - account_id : bigint
+  - itemID : int
+  - itemPurchaseDate : timestamp
+  - itemClaims : text
+  - used : tinyint
+- **achivement_data**
+  - id : int (PK)
+  - playerOid : bigint
+  - type : int
+  - obj : varchar
+  - rankingId : int
+  - achievementId : int
+  - acquired : tinyint
+  - value : int
+- **auction_house**
+  - id : int (PK)
+  - startbid : bigint
+  - currency_id : int
+  - expire_date : datetime
+  - auctioneer_oid : bigint
+  - owner_oid : bigint
+  - bidder_oid : bigint
+  - race_group_id : int
+  - bid : int
+  - buyout : bigint
+  - status : int
+  - mode : int
+  - item_oid : bigint
+  - item_count : int
+  - item_template_id : int
+  - item_enchant_level : int
+  - item_sockets_info : text
+  - world_name : varchar
+- **auction_house_ended**
+  - id : bigint (PK)
+  - startbid : int
+  - currency_id : int
+  - expire_date : datetime
+  - auctioneer_oid : bigint
+  - owner_oid : bigint
+  - bidder_oid : bigint
+  - race_group_id : int
+  - bid : int
+  - buyout : bigint
+  - status : int
+  - mode : int
+  - item_oid : bigint
+  - item_count : int
+  - item_template_id : int
+  - item_enchant_level : int
+  - item_sockets_info : text
+  - world_name : varchar
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **character_block_list**
+  - id : int (PK)
+  - character_id : bigint
+  - block_player_id : bigint
+  - friend_name : varchar
+- **character_friends**
+  - id : int (PK)
+  - character_id : bigint
+  - friend_id : bigint
+  - friend_name : varchar
+- **character_mail**
+  - mailId : int (PK)
+  - mailArchive : tinyint
+  - isAccountMail : tinyint
+  - recipientId : bigint
+  - recipientName : varchar
+  - senderId : bigint
+  - senderName : varchar
+  - mailRead : tinyint
+  - mailSubject : varchar
+  - mailMessage : text
+  - currencyType : int
+  - currencyAmount : bigint
+  - currencyTaken : tinyint
+  - CoD : tinyint
+  - mailAttachmentItemId1Taken : tinyint
+  - mailAttachmentItemId1 : bigint
+  - mailAttachmentItemId2Taken : tinyint
+  - mailAttachmentItemId2 : bigint
+  - mailAttachmentItemId3Taken : tinyint
+  - mailAttachmentItemId3 : bigint
+  - mailAttachmentItemId4Taken : tinyint
+  - mailAttachmentItemId4 : bigint
+  - mailAttachmentItemId5Taken : tinyint
+  - mailAttachmentItemId5 : bigint
+  - mailAttachmentItemId6Taken : tinyint
+  - mailAttachmentItemId6 : bigint
+  - mailAttachmentItemId7Taken : tinyint
+  - mailAttachmentItemId7 : bigint
+  - mailAttachmentItemId8Taken : tinyint
+  - mailAttachmentItemId8 : bigint
+  - mailAttachmentItemId9Taken : tinyint
+  - mailAttachmentItemId9 : bigint
+  - mailAttachmentItemId10Taken : tinyint
+  - mailAttachmentItemId10 : bigint
+  - expiry : datetime
+  - dateCreated : timestamp
+  - dateUpdated : timestamp
+- **character_purchases**
+  - character_id : bigint
+  - itemID : int
+  - itemPurchaseDate : timestamp
+  - id : int (PK)
+  - used : tinyint
+- **chat_logs**
+  - id : int (PK)
+  - world : varchar
+  - date : timestamp
+  - message : text
+  - source : bigint
+  - target : bigint
+  - channel : int
+- **claim**
+  - id : int (PK)
+  - name : varchar
+  - instance : int
+  - instanceOwner : bigint
+  - instanceGuild : bigint
+  - locX : float
+  - locY : float
+  - locZ : float
+  - claimType : int
+  - owner : bigint
+  - size : int
+  - sizeZ : int
+  - sizeY : int
+  - forSale : tinyint
+  - sellerName : varchar
+  - cost : bigint
+  - currency : int
+  - purchaseItemReq : varchar
+  - taxPaidUntil : timestamp
+  - claimItemTemplate : int
+  - bondItemTemplate : int
+  - bondPaidUntil : timestamp
+  - priority : int
+  - upgrade : int
+  - parent : int
+  - permanent : tinyint
+  - org_cost : bigint
+  - org_currency : int
+  - object_limit_profile : int
+  - taxCurrency : int
+  - taxAmount : bigint
+  - taxInterval : bigint
+  - taxPeriodPay : bigint
+  - taxPeriodSell : bigint
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **claim_action**
+  - id : int (PK)
+  - claimID : int
+  - action : varchar
+  - brushType : varchar
+  - locX : float
+  - locY : float
+  - locZ : float
+  - material : smallint
+  - normalX : float
+  - normalY : float
+  - normalZ : float
+  - sizeX : float
+  - sizeY : float
+  - sizeZ : float
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **claim_object**
+  - id : int (PK)
+  - claimID : int
+  - template : int
+  - stage : int
+  - complete : tinyint
+  - parent : int
+  - parents : varchar
+  - gameObject : varchar
+  - locX : float
+  - locY : float
+  - locZ : float
+  - orientX : float
+  - orientY : float
+  - orientZ : float
+  - orientW : float
+  - itemID : int
+  - objectState : varchar
+  - health : int
+  - maxHealth : int
+  - item1 : int
+  - item1Count : int
+  - item2 : int
+  - item2Count : int
+  - item3 : int
+  - item3Count : int
+  - item4 : int
+  - item4Count : int
+  - item5 : int
+  - item5Count : int
+  - item6 : int
+  - item6Count : int
+  - lockTemplateID : int
+  - lockDurability : int
+  - start_build_time : bigint
+  - progress : int
+  - taskCurrentTime : bigint
+  - taskLastTimeUpdate : bigint
+  - ownerStat : int
+  - taskPlayerOid : bigint
+  - finalStage : tinyint
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **claim_permission**
+  - id : int (PK)
+  - claimID : int
+  - playerOid : bigint
+  - playerName : varchar
+  - permissionLevel : int
+  - dateGiven : datetime
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **claim_resource**
+  - id : int (PK)
+  - claimID : int
+  - itemID : int
+  - count : int
+- **claim_upgrade**
+  - id : int (PK)
+  - claimID : int
+  - locX : float
+  - locY : float
+  - locZ : float
+  - sizeX : int
+  - sizeZ : int
+  - sizeY : int
+  - cost : bigint
+  - currency : int
+  - purchaseItemReq : varchar
+  - object_limit_profile : int
+  - taxCurrency : int
+  - taxAmount : bigint
+  - taxInterval : bigint
+  - taxPeriodPay : bigint
+  - taxPeriodSell : bigint
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **cooldowns**
+  - id : int (PK)
+  - cid : varchar
+  - duration : int
+  - startTime : bigint
+  - obj_oid : int
+- **data_logs**
+  - id : bigint (PK)
+  - world_name : varchar
+  - data_name : varchar
+  - data_timestamp : timestamp
+  - source_oid : bigint
+  - target_oid : bigint
+  - account_id : bigint
+  - additional_data : text
+  - process_timestamp : timestamp
+- **guild**
+  - id : int (PK)
+  - name : varchar
+  - faction : int
+  - motd : varchar
+  - omotd : varchar
+  - isactive : tinyint
+  - level : smallint
+  - warehouse : bigint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **guild_level_resources**
+  - id : int (PK)
+  - guild_id : int
+  - item_id : int
+  - item_count : int
+- **guild_member**
+  - id : int (PK)
+  - guildID : int
+  - memberOid : bigint
+  - name : varchar
+  - guildRank : int
+  - level : int
+  - note : varchar
+  - creationtimestamp : timestamp
+- **guild_rank**
+  - id : int (PK)
+  - guildID : int
+  - guildRank : int
+  - name : varchar
+  - permissions : varchar
+  - creationtimestamp : timestamp
+- **history_auction_house_ended**
+  - id : bigint (PK)
+  - auction_id : bigint
+  - startbid : int
+  - currency_id : int
+  - expire_date : datetime
+  - auctioneer_oid : bigint
+  - owner_oid : bigint
+  - bidder_oid : bigint
+  - race_group_id : int
+  - bid : int
+  - buyout : bigint
+  - status : int
+  - mode : int
+  - item_oid : bigint
+  - item_count : int
+  - item_template_id : int
+  - item_enchant_level : int
+  - item_sockets_info : text
+  - world_name : varchar
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **history_character_mail**
+  - id : int (PK)
+  - mailId : int
+  - mailArchive : tinyint
+  - isAccountMail : tinyint
+  - recipientId : bigint
+  - recipientName : varchar
+  - senderId : bigint
+  - senderName : varchar
+  - mailRead : tinyint
+  - mailSubject : varchar
+  - mailMessage : text
+  - currencyType : int
+  - currencyAmount : int
+  - currencyTaken : tinyint
+  - CoD : tinyint
+  - mailAttachmentItemId1Taken : tinyint
+  - mailAttachmentItemId1 : bigint
+  - mailAttachmentItemId2Taken : tinyint
+  - mailAttachmentItemId2 : bigint
+  - mailAttachmentItemId3Taken : tinyint
+  - mailAttachmentItemId3 : bigint
+  - mailAttachmentItemId4Taken : tinyint
+  - mailAttachmentItemId4 : bigint
+  - mailAttachmentItemId5Taken : tinyint
+  - mailAttachmentItemId5 : bigint
+  - mailAttachmentItemId6Taken : tinyint
+  - mailAttachmentItemId6 : bigint
+  - mailAttachmentItemId7Taken : tinyint
+  - mailAttachmentItemId7 : bigint
+  - mailAttachmentItemId8Taken : tinyint
+  - mailAttachmentItemId8 : bigint
+  - mailAttachmentItemId9Taken : tinyint
+  - mailAttachmentItemId9 : bigint
+  - mailAttachmentItemId10Taken : tinyint
+  - mailAttachmentItemId10 : bigint
+  - expiry : datetime
+  - dateCreated : timestamp
+  - dateUpdated : timestamp
+- **instance_template**
+  - id : int (PK)
+  - island_name : varchar
+  - template : varchar
+  - administrator : int
+  - category : int
+  - status : varchar
+  - subscription : datetime
+  - public : tinyint
+  - password : varchar
+  - rating : int
+  - islandType : int
+  - globalWaterHeight : float
+  - createOnStartup : tinyint
+  - style : varchar
+  - recommendedLevel : int
+  - description : text
+  - size : int
+  - populationLimit : int
+  - lastUpdate : timestamp
+  - dateCreated : timestamp
+- **island_developers**
+  - id : int (PK)
+  - island : int
+  - developer : int
+- **island_friends**
+  - id : int (PK)
+  - island : int
+  - user : int
+- **island_portals**
+  - id : int (PK)
+  - island : int
+  - portalType : int
+  - faction : int
+  - locX : decimal
+  - locY : decimal
+  - locZ : decimal
+  - orientX : int
+  - orientY : int
+  - orientZ : int
+  - orientW : int
+  - displayID : int
+  - name : varchar
+  - gameObject : varchar
+- **memory_data_stats**
+  - id : int (PK)
+  - type : varchar
+  - value : bigint
+  - world : varchar
+- **player_shop**
+  - id : bigint (PK)
+  - shop_oid : bigint
+  - player_oid : bigint
+  - tag : varchar
+  - title : varchar
+  - end_player_logout : tinyint
+  - createtime : bigint
+  - timeout : int
+  - player : tinyint
+- **player_shop_items**
+  - id : bigint (PK)
+  - shop_oid : bigint
+  - item_oid : bigint
+  - price : bigint
+  - currency : int
+  - template_id : int
+  - count : int
+  - sell : tinyint
+- **rankings**
+  - id : int (PK)
+  - pos : int
+  - player : bigint
+  - ranking : int
+  - value : int
+- **ranking_run**
+  - world : varchar (PK)
+  - last_run : bigint
+- **server**
+  - action : varchar
+  - status : tinyint
+- **server_stats**
+  - players_online : int (PK)
+  - last_login : timestamp
+  - logins_since_restart : int
+  - last_restart : timestamp
+- **server_status**
+  - server : varchar
+  - status : tinyint
+- **server_version**
+  - server_version : varchar (PK)
+  - installation_type : varchar
+- **shopitems**
+  - id : int (PK)
+  - name : varchar
+  - cost : int
+  - category : varchar
+  - imageAddress : varchar
+  - newItem : tinyint
+  - costImage : varchar
+  - buyImage : varchar
+  - purchaseType : varchar
+  - objectName : varchar
+  - purchaselimit : int
+- **shop_spawn_data**
+  - id : int (PK)
+  - category : int
+  - name : varchar
+  - mobTemplate : int
+  - mobTemplate2 : int
+  - mobTemplate3 : int
+  - mobTemplate4 : int
+  - mobTemplate5 : int
+  - markerName : varchar
+  - locX : float
+  - locY : float
+  - locZ : float
+  - orientX : float
+  - orientY : float
+  - orientZ : float
+  - orientW : float
+  - instance : int
+  - numSpawns : int
+  - spawnRadius : int
+  - respawnTime : int
+  - respawnTimeMax : int
+  - corpseDespawnTime : int
+  - spawnActiveStartHour : int
+  - spawnActiveEndHour : int
+  - alternateSpawnMobTemplate : int
+  - alternateSpawnMobTemplate2 : int
+  - alternateSpawnMobTemplate3 : int
+  - alternateSpawnMobTemplate4 : int
+  - alternateSpawnMobTemplate5 : int
+  - combat : tinyint
+  - roamRadius : int
+  - startsQuests : varchar
+  - endsQuests : varchar
+  - startsDialogues : varchar
+  - otherActions : varchar
+  - baseAction : varchar
+  - weaponSheathed : tinyint
+  - merchantTable : int
+  - patrolPath : int
+  - questOpenLootTable : int
+  - isChest : tinyint
+  - pickupItem : int
+  - shop_owner : bigint
+  - shop_oid : bigint
+  - shop_message : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **templateportals**
+  - id : int (PK)
+  - templateID : int
+  - portalType : int
+  - faction : int
+  - locX : int
+  - locY : int
+  - locZ : int
+  - displayID : int
+- **templates**
+  - id : int (PK)
+  - name : varchar
+  - size : int
+- **users**
+  - username : varchar (PK)
+  - password : varchar
+- **world_time**
+  - id : int (PK)
+  - world_name : varchar
+  - year : int
+  - month : int
+  - day : int
+  - hour : int
+  - minute : int
+  - second : int
+
+## Schema `atavism`
+- **backdating_tables**
+  - DBName : varchar
+  - TableName : varchar
+  - oid_manager_Type : varchar
+  - DisplayName : varchar
+  - LastUpdate : datetime
+- **custom_banned**
+  - name : varchar (PK)
+  - reason : varchar
+  - bannedby : varchar
+  - expire : datetime
+- **custom_profanity**
+  - name : varchar (PK)
+  - reason : varchar
+  - bannedby : varchar
+- **history_objstore**
+  - id : int (PK)
+  - obj_id : bigint
+  - namespace_int : tinyint
+  - world_name : varchar
+  - locX : int
+  - locY : int
+  - locZ : int
+  - instance : bigint
+  - metadata : varchar
+  - type : varchar
+  - name : varchar
+  - persistence_key : varchar
+  - data : longblob
+  - timestamp : timestamp
+- **mod_audit_logs**
+  - id : bigint (PK)
+  - time : datetime
+  - module : varchar
+  - action : varchar
+  - obj_id : bigint
+  - sub_id : bigint
+  - column1 : varchar
+  - prev_value1 : varchar
+  - new_value1 : varchar
+  - column2 : varchar
+  - prev_value2 : varchar
+  - new_value2 : varchar
+  - column3 : varchar
+  - prev_value3 : varchar
+  - new_value3 : varchar
+  - column4 : varchar
+  - prev_value4 : varchar
+  - new_value4 : varchar
+  - column5 : varchar
+  - prev_value5 : varchar
+  - new_value5 : varchar
+  - column6 : varchar
+  - prev_value6 : varchar
+  - new_value6 : varchar
+  - column7 : varchar
+  - prev_value7 : varchar
+  - new_value7 : varchar
+  - column8 : varchar
+  - prev_value8 : varchar
+  - new_value8 : varchar
+  - column9 : varchar
+  - prev_value9 : varchar
+  - new_value9 : varchar
+  - column10 : varchar
+  - prev_value10 : varchar
+  - new_value10 : varchar
+  - column11 : varchar
+  - prev_value11 : varchar
+  - new_value11 : varchar
+  - column12 : varchar
+  - prev_value12 : varchar
+  - new_value12 : varchar
+- **namespaces**
+  - namespace_string : varchar (PK)
+  - namespace_int : tinyint
+- **objstore**
+  - obj_id : bigint (PK)
+  - namespace_int : tinyint (PK)
+  - world_name : varchar
+  - locX : decimal
+  - locY : decimal
+  - locZ : decimal
+  - instance : bigint
+  - metadata : varchar
+  - type : varchar
+  - name : varchar
+  - persistence_key : varchar
+  - data : longblob
+- **oid_manager**
+  - token : int (PK)
+  - free_oid : bigint
+- **player_abilities**
+  - oid : bigint (PK)
+  - category : int (PK)
+  - world_name : varchar (PK)
+  - template_id : int (PK)
+- **player_bag**
+  - oid : bigint (PK)
+  - player_oid : bigint (PK)
+  - world_name : varchar (PK)
+  - storage_name : varchar
+  - item_template_id : int
+  - num_slots : int
+  - chest_lock : bigint
+  - lockable : tinyint
+  - lock_limit : int
+  - bank : int
+  - use_type : int
+- **player_bags**
+  - player_oid : bigint (PK)
+  - storage_oid : bigint (PK)
+  - storage_name : varchar (PK)
+  - storage_type : int
+  - storage_index : int
+  - category : int (PK)
+  - world_name : varchar (PK)
+- **player_bag_bank**
+  - oid : bigint (PK)
+  - player_oid : bigint (PK)
+  - world_name : varchar (PK)
+  - storage_name : varchar
+  - item_template_id : int
+  - num_slots : int
+  - chest_lock : bigint
+  - lockable : tinyint
+  - lock_limit : int
+  - bank : int
+  - use_type : int
+- **player_bag_bank_slots**
+  - bag_oid : bigint (PK)
+  - slot_id : int (PK)
+  - item_oid : bigint
+- **player_bag_equip**
+  - oid : bigint (PK)
+  - player_oid : bigint (PK)
+  - world_name : varchar (PK)
+  - storage_name : varchar
+  - item_template_id : int
+  - num_slots : int
+  - chest_lock : bigint
+  - lockable : tinyint
+  - lock_limit : int
+  - bank : int
+  - use_type : int
+- **player_bag_equip_slots**
+  - bag_oid : bigint (PK)
+  - slot_id : int (PK)
+  - item_oid : bigint
+- **player_bag_guild**
+  - oid : bigint (PK)
+  - player_oid : bigint (PK)
+  - world_name : varchar (PK)
+  - storage_name : varchar
+  - item_template_id : int
+  - num_slots : int
+  - chest_lock : bigint
+  - lockable : tinyint
+  - lock_limit : int
+  - bank : tinyint
+  - use_type : int
+- **player_bag_guild_slots**
+  - bag_oid : bigint (PK)
+  - slot_id : int (PK)
+  - item_oid : bigint
+- **player_bag_slots**
+  - bag_oid : bigint (PK)
+  - slot_id : int (PK)
+  - item_oid : bigint
+- **player_character**
+  - account_id : bigint
+  - world_name : varchar
+  - obj_id : bigint
+  - namespace_int : tinyint
+- **player_currencies**
+  - player_oid : bigint (PK)
+  - currency_id : int (PK)
+  - currency_value : bigint
+  - category : int (PK)
+  - world_name : varchar (PK)
+- **player_items**
+  - obj_id : bigint (PK)
+  - templateID : int
+  - stackSize : int
+  - inv.backref : bigint
+  - persistenceFlag : tinyint
+  - item_equipInfo : varchar
+  - world_name : varchar (PK)
+  - enchant_level : int
+  - durability : int
+  - boundPlayerOid : bigint
+  - creationtimestamp : timestamp
+- **player_item_sockets**
+  - item_oid : bigint (PK)
+  - socket_item_id : bigint
+  - socket_id : smallint (PK)
+  - world_name : varchar (PK)
+- **player_pets**
+  - world_name : varchar (PK)
+  - player_oid : bigint (PK)
+  - pet_profile : int (PK)
+  - exp : bigint
+  - equip_bag_oid : bigint
+  - level : int
+- **player_skills**
+  - oid : bigint (PK)
+  - category : int
+  - world_name : varchar
+  - template_id : int (PK)
+  - current : int
+  - level : int
+  - level_max : int
+  - experience : int
+  - experience_max : int
+- **player_stats**
+  - oid : bigint (PK)
+  - world_name : varchar (PK)
+  - template_id : int (PK)
+  - min : int
+  - max : int
+  - base : int
+  - current : int
+  - flag : int
+- **player_stats_modifiers**
+  - id : bigint (PK)
+  - oid : bigint
+  - template_id : int
+  - world_name : varchar
+  - tstring : varchar
+  - toid : bigint
+  - value : int
+- **player_stats_modifiers_percentage**
+  - id : bigint (PK)
+  - oid : bigint
+  - template_id : int
+  - world_name : varchar
+  - tstring : varchar
+  - toid : bigint
+  - value : float
+- **plugin_status**
+  - world_name : varchar
+  - agent_name : varchar
+  - plugin_name : varchar
+  - plugin_type : varchar
+  - host_name : varchar
+  - pid : int
+  - run_id : bigint
+  - percent_cpu_load : int
+  - last_update_time : bigint
+  - next_update_time : bigint
+  - status : varchar
+  - info : varchar
+
+## Schema `master`
+- **account**
+  - id : int (PK)
+  - username : varchar
+  - password : varchar
+  - email : varchar
+  - status : int
+  - birthdate : date
+  - activated : tinyint
+  - suspended : tinyint
+  - activation_key : varchar
+  - current_world_id : int
+  - created_at : datetime
+  - last_modified_at : datetime
+  - coin_current : int
+  - coin_total : int
+  - external_id : varchar
+- **account_character**
+  - id : int (PK)
+  - account_id : int
+  - character_id : bigint
+  - world_server_id : int
+  - status : int
+- **account_purchases**
+  - id : int (PK)
+  - account_id : bigint
+  - itemID : int
+  - itemCount : int
+  - itemPurchaseDate : timestamp
+  - itemClaimDate : timestamp
+  - itemClaims : text
+- **account_setting**
+  - id : int (PK)
+  - account_id : int
+  - setting : varchar
+  - settingValue : varchar
+- **bonuses**
+  - id : int (PK)
+  - character_oid : bigint
+  - object : varchar
+  - code : varchar
+  - value : int
+  - valuep : float
+- **developer**
+  - dev_id : int (PK)
+  - email : varchar
+  - company : varchar
+  - password : varchar
+  - size : varchar
+  - skill : varchar
+  - prior : varchar
+  - genre : varchar
+  - idea : text
+- **vip**
+  - account_id : int
+  - character_oid : int
+  - world : varchar
+  - vip_level : int
+  - vip_expire : bigint
+  - vip_points : int
+- **world**
+  - world_id : int (PK)
+  - dev_id : int
+  - world_name : varchar
+  - pretty_name : varchar
+  - description : text
+  - server_name : varchar
+  - server_ip : varchar
+  - server_port : int
+  - public : int
+  - approved : tinyint
+  - patcher_URL : varchar
+  - media_URL : varchar
+  - logo_URL : varchar
+  - detail_URL : varchar
+  - display_order : int
+  - population : int
+  - max_population : int
+  - queue : int
+  - server_type : varchar
+  - status : varchar
+  - restriction_level : int
+  - last_update : timestamp
+
+## Schema `world_content`
+- **abilities**
+  - id : int (PK)
+  - name : varchar
+  - icon : varchar
+  - abilityType : varchar
+  - skill : int
+  - passive : tinyint
+  - activationCost : int
+  - activationCostType : varchar
+  - activationLength : float
+  - attack_time : float
+  - activationAnimation : varchar
+  - activationParticles : varchar
+  - casterEffectRequired : int
+  - casterEffectConsumed : tinyint
+  - targetEffectRequired : int
+  - targetEffectConsumed : tinyint
+  - weaponRequired : varchar
+  - reagentRequired : int
+  - reagentCount : int
+  - reagentConsumed : tinyint
+  - reagent2Required : int
+  - reagent2Count : int
+  - reagent2Consumed : tinyint
+  - reagent3Required : int
+  - reagent3Count : int
+  - reagent3Consumed : tinyint
+  - ammoUsed : int
+  - maxRange : int
+  - minRange : int
+  - aoeRadius : int
+  - aoeAngle : float
+  - aoeType : varchar
+  - reqTarget : tinyint
+  - reqFacingTarget : tinyint
+  - autoRotateToTarget : tinyint
+  - relativePositionReq : int
+  - targetType : varchar
+  - targetSubType : varchar
+  - targetState : int
+  - casterState : int
+  - speciesTargetReq : varchar
+  - specificTargetReq : varchar
+  - globalCooldown : tinyint
+  - cooldown1Type : varchar
+  - cooldown1Duration : float
+  - weaponCooldown : tinyint
+  - startCooldownsOnActivation : tinyint
+  - activationEffect1 : int
+  - activationTarget1 : varchar
+  - activationEffect2 : int
+  - activationTarget2 : varchar
+  - activationEffect3 : int
+  - activationTarget3 : varchar
+  - activationEffect4 : int
+  - activationTarget4 : varchar
+  - activationEffect5 : int
+  - activationTarget5 : varchar
+  - activationEffect6 : int
+  - activationTarget6 : varchar
+  - coordEffect1event : varchar
+  - coordEffect1 : varchar
+  - coordEffect2event : varchar
+  - coordEffect2 : varchar
+  - coordEffect3event : varchar
+  - coordEffect3 : varchar
+  - coordEffect4event : varchar
+  - coordEffect4 : varchar
+  - coordEffect5event : varchar
+  - coordEffect5 : varchar
+  - tooltip : varchar
+  - interceptType : int
+  - icon2 : mediumtext
+  - chance : float
+  - castingInRun : tinyint
+  - exp : int
+  - consumeOnActivation : tinyint
+  - channelling : tinyint
+  - channelling_cost : int
+  - channelling_pulse_num : int
+  - channelling_pulse_time : float
+  - channelling_in_run : tinyint
+  - projectile : tinyint
+  - projectile_speed : int
+  - activationDelay : float
+  - pulseCost : int
+  - pulseCostType : varchar
+  - pulseCasterEffectRequired : int
+  - pulseCasterEffectConsumed : tinyint
+  - pulseTargetEffectRequired : int
+  - pulseTargetEffectConsumed : tinyint
+  - pulseReagentRequired : int
+  - pulseReagentCount : int
+  - pulseReagentConsumed : tinyint
+  - pulseReagent2Required : int
+  - pulseReagent2Count : int
+  - pulseReagent2Consumed : tinyint
+  - pulseReagent3Required : int
+  - pulseReagent3Count : int
+  - pulseReagent3Consumed : tinyint
+  - pulseAmmoUsed : int
+  - skipChecks : tinyint
+  - activationCostPercentage : float
+  - pulseCostPercentage : float
+  - aoePrefab : varchar
+  - stealth_reduce : tinyint
+  - interruptible : tinyint
+  - interruption_chance : float
+  - toggle : tinyint
+  - tags : text
+  - tag_disable : int
+  - tag_count : int
+  - speed : float
+  - chunk_length : float
+  - prediction : int
+  - aoe_target_count_type : int
+  - aoe_target_count : int
+  - attack_building : tinyint
+  - damageType : varchar
+  - stealth_reduction_amount : int
+  - stealth_reduction_percentage : float
+  - stealth_reduction_timeout : bigint
+  - skill_up_chance : int
+  - miss_chance : float
+  - tags_on_caster : text
+  - tags_on_target : text
+  - tags_not_on_caster : text
+  - tags_not_on_target : text
+  - pulse_tags_on_caster : text
+  - pulse_tags_on_target : text
+  - pulse_tags_not_on_caster : text
+  - is_child : tinyint
+  - combatState : int
+  - powerUpCoordEffect : varchar
+  - makeBusy : tinyint
+  - checkBusy : tinyint
+  - weaponMustBeDrawn : tinyint
+  - drawnWeaponBefore : tinyint
+  - enemyTargetChangeToSelf : tinyint
+  - line_of_sight : tinyint
+  - pulse_tags_not_on_target : text
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **abilities_coordeffects**
+  - id : int (PK)
+  - ability_power_id : int
+  - coordEffectEvent : varchar
+  - coordEffect : varchar
+- **abilities_powerup_settings**
+  - id : int (PK)
+  - ability_id : int
+  - thresholdMaxTime : float
+- **abilities_triggers**
+  - id : int (PK)
+  - ability_power_id : int
+  - trigger_id : int
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **abilities_triggers_actions**
+  - id : int (PK)
+  - abilities_triggers_id : int
+  - target : int
+  - ability : int
+  - effect : int
+  - mod_v : int
+  - mod_p : float
+  - chance_min : float
+  - chance_max : float
+- **abilities_triggers_profile**
+  - id : int (PK)
+  - name : varchar
+  - event_type : int
+  - tags : text
+  - race : int
+  - class : int
+  - action_type : tinyint
+  - chance_min : float
+  - chance_max : float
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **ability_abilities**
+  - id : int (PK)
+  - ability_power_id : int
+  - target : varchar
+  - ability : int
+  - delay : int
+  - chance_min : float
+  - chance_max : float
+- **ability_combos**
+  - id : int (PK)
+  - ability_parent_id : int
+  - ability_sub_id : int
+  - chance_min : float
+  - chance_max : float
+  - show_in_center_ui : tinyint
+  - replace_in_slot : tinyint
+  - check_cooldown : tinyint
+  - time : int
+- **ability_effects**
+  - id : int (PK)
+  - ability_power_id : int
+  - target : varchar
+  - effect : int
+  - delay : int
+  - chance_min : float
+  - chance_max : float
+- **achievements**
+  - id : int (PK)
+  - name : varchar
+  - category : varchar
+  - subcategory : varchar
+  - points : int
+  - text : text
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **achievement_bonuses**
+  - achievement_id : int
+  - bonus_settings_id : int
+  - value : int
+  - valuep : float
+- **achievement_categories**
+  - name : varchar (PK)
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **achievement_criteria**
+  - id : int (PK)
+  - achievementID : int
+  - event : varchar
+  - eventCount : int
+  - resetEvent1 : varchar
+  - resetEvent2 : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **achievement_settings**
+  - id : int (PK)
+  - type : int
+  - value : int
+  - name : varchar
+  - description : text
+  - objects : varchar
+  - isactive : tinyint
+- **achievement_stats**
+  - achievement_id : int
+  - stat : varchar
+  - value : int
+  - valuep : float
+- **achievement_subcategories**
+  - id : int (PK)
+  - name : varchar
+  - category : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **arena_categories**
+  - id : int (PK)
+  - skin1 : varchar
+  - skin2 : varchar
+  - skin3 : varchar
+  - skin4 : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **arena_teams**
+  - id : int (PK)
+  - arenaID : int
+  - name : varchar
+  - size : int
+  - race : varchar
+  - goal : int
+  - spawnX : float
+  - spawnY : float
+  - spawnZ : float
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **arena_templates**
+  - id : int (PK)
+  - arenaType : int
+  - name : varchar
+  - arenaCategory : int
+  - arenaInstanceID : int
+  - length : int
+  - defaultWinner : int
+  - team1 : int
+  - team2 : int
+  - team3 : int
+  - team4 : int
+  - levelReq : int
+  - levelMax : int
+  - victoryCurrency : int
+  - victoryPayment : int
+  - defeatCurrency : int
+  - defeatPayment : int
+  - victoryExp : int
+  - defeatExp : int
+  - isactive : tinyint
+  - start_hour : int
+  - start_minute : int
+  - end_hour : int
+  - end_minute : int
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+  - description : varchar
+- **auction_profile**
+  - id : int (PK)
+  - name : varchar
+  - cost_price_value : int
+  - cost_price_value_percentage : float
+  - currency : int
+  - duration : int
+  - display_limit : int
+  - own_limit : int
+  - start_price_value : int
+  - start_price_percentage : float
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **behavior_conditions**
+  - id : int (PK)
+  - conditions_group_id : int
+  - type : int
+  - distance : float
+  - less : tinyint
+  - stat_name : varchar
+  - stat_value : float
+  - stat_vitality_percentage : tinyint
+  - target : int
+  - effect_tag_id : int
+  - on_target : tinyint
+  - combat_state : tinyint
+  - death_state : tinyint
+  - trigger_event_Id : int
+  - target_number : int
+  - target_ally : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **behavior_conditions_group**
+  - id : int (PK)
+  - group_order : int
+  - behavior_id : int
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **bonuses_settings**
+  - id : int (PK)
+  - name : varchar
+  - code : varchar
+  - param : varchar
+  - isactive : tinyint
+- **building_grids**
+  - id : int (PK)
+  - instance : varchar
+  - locX : float
+  - locY : float
+  - locZ : float
+  - type : int
+  - owner : bigint
+  - layer_count : int
+  - building1 : varchar
+  - building1_rotation : float
+  - building2 : varchar
+  - building2_rotation : float
+  - building3 : varchar
+  - building3_rotation : float
+  - building4 : varchar
+  - building4_rotation : float
+  - building5 : varchar
+  - building5_rotation : float
+  - layer_height : float
+  - blueprint1 : int
+  - blueprint2 : int
+  - blueprint3 : int
+  - blueprint4 : int
+  - blueprint5 : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **build_object_limits**
+  - id : int (PK)
+  - profile_id : int
+  - object_category : int
+  - count : int
+  - isactive : int
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **build_object_stage**
+  - id : int (PK)
+  - gameObject : varchar
+  - nextStage : int
+  - buildTimeReq : float
+  - repairTimeReq : float
+  - interactionType : varchar
+  - interactionID : int
+  - interactionData1 : varchar
+  - health : int
+  - lootTable : int
+  - lootMinPercentage : float
+  - lootMaxPercentage : float
+  - itemReq1 : int
+  - itemReq1Count : int
+  - itemReq2 : int
+  - itemReq2Count : int
+  - itemReq3 : int
+  - itemReq3Count : int
+  - itemReq4 : int
+  - itemReq4Count : int
+  - itemReq5 : int
+  - itemReq5Count : int
+  - itemReq6 : int
+  - itemReq6Count : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **build_object_stage_damaged**
+  - id : int (PK)
+  - stage_id : int
+  - progress : smallint
+  - prefab : varchar
+  - trimesh : longblob
+- **build_object_stage_items**
+  - id : int (PK)
+  - stage_id : int
+  - item : int
+  - count : int
+- **build_object_stage_progress**
+  - id : int (PK)
+  - stage_id : int
+  - progress : smallint
+  - prefab : varchar
+  - trimesh : longblob
+- **build_object_template**
+  - id : int (PK)
+  - name : varchar
+  - icon : varchar
+  - category : int
+  - skill : int
+  - skillLevelReq : int
+  - weaponReq : varchar
+  - distanceReq : float
+  - buildTaskReqPlayer : tinyint
+  - buildSolo : tinyint
+  - fixedTime : tinyint
+  - validClaimType : varchar
+  - firstStageID : int
+  - availableFromItemOnly : tinyint
+  - interactionType : varchar
+  - interactionID : int
+  - interactionData1 : varchar
+  - lockable : tinyint
+  - lockLimit : int
+  - claim_object_category : int
+  - attackable : tinyint
+  - repairable : tinyint
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+  - icon2 : mediumtext
+- **character_create_gender**
+  - id : int (PK)
+  - character_create_id : int
+  - gender : int
+  - model : varchar
+  - icon : varchar
+  - icon2 : mediumtext
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **character_create_items**
+  - id : int (PK)
+  - character_create_id : int
+  - item_id : int
+  - count : int
+  - equipped : tinyint
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **character_create_skills**
+  - id : int (PK)
+  - character_create_id : int
+  - skill : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **character_create_stats**
+  - id : int (PK)
+  - character_create_id : int
+  - stat : varchar
+  - value : int
+  - levelIncrease : float
+  - levelPercentIncrease : float
+  - sendToClient : tinyint
+  - serverPresent : tinyint
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **character_create_template**
+  - id : int (PK)
+  - race : int
+  - aspect : int
+  - instance : int
+  - pos_x : float
+  - pos_y : float
+  - pos_z : float
+  - orientation : float
+  - faction : int
+  - autoAttack : int
+  - race_icon : varchar
+  - race_icon2 : mediumtext
+  - class_icon : varchar
+  - class_icon2 : mediumtext
+  - race_description : varchar
+  - class_description : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+  - respawnInstance : int
+  - respawnPosX : float
+  - respawnPosY : float
+  - respawnPosZ : float
+  - startingLevel : int
+  - sprint : int
+  - xpProfile : int
+  - dodge : int
+  - stat_profile_id : int
+- **claim_profile**
+  - id : int (PK)
+  - name : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **coordinated_effects**
+  - id : int (PK)
+  - name : varchar
+  - prefab : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **crafting_recipes**
+  - id : int (PK)
+  - name : varchar
+  - icon : varchar
+  - resultItemID : int
+  - resultItemCount : int
+  - resultItem2ID : int
+  - resultItem2Count : int
+  - resultItem3ID : int
+  - resultItem3Count : int
+  - resultItem4ID : int
+  - resultItem4Count : int
+  - chance : float
+  - resultItem5ID : int
+  - resultItem5Count : int
+  - resultItem6ID : int
+  - resultItem6Count : int
+  - resultItem7ID : int
+  - resultItem7Count : int
+  - resultItem8ID : int
+  - resultItem8Count : int
+  - chance2 : float
+  - resultItem9ID : int
+  - resultItem9Count : int
+  - resultItem10ID : int
+  - resultItem10Count : int
+  - resultItem11ID : int
+  - resultItem11Count : int
+  - resultItem12ID : int
+  - resultItem12Count : int
+  - chance3 : float
+  - resultItem13ID : int
+  - resultItem13Count : int
+  - resultItem14ID : int
+  - resultItem14Count : int
+  - resultItem15ID : int
+  - resultItem15Count : int
+  - resultItem16ID : int
+  - resultItem16Count : int
+  - chance4 : float
+  - skillID : int
+  - skillLevelReq : int
+  - skillLevelMax : int
+  - stationReq : varchar
+  - creationTime : int
+  - recipeItemID : int
+  - layoutReq : tinyint
+  - qualityChangeable : tinyint
+  - allowDyes : tinyint
+  - allowEssences : tinyint
+  - crafting_xp : int
+  - component1 : int
+  - component1count : int
+  - component2 : int
+  - component2count : int
+  - component3 : int
+  - component3count : int
+  - component4 : int
+  - component4count : int
+  - component5 : int
+  - component5count : int
+  - component6 : int
+  - component6count : int
+  - component7 : int
+  - component7count : int
+  - component8 : int
+  - component8count : int
+  - component9 : int
+  - component9count : int
+  - component10 : int
+  - component10count : int
+  - component11 : int
+  - component11count : int
+  - component12 : int
+  - component12count : int
+  - component13 : int
+  - component13count : int
+  - component14 : int
+  - component14count : int
+  - component15 : int
+  - component15count : int
+  - component16 : int
+  - component16count : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+  - icon2 : mediumtext
+- **currencies**
+  - id : int (PK)
+  - category : int
+  - name : varchar
+  - icon : varchar
+  - description : varchar
+  - maximum : bigint
+  - currencyGroup : int
+  - currencyPosition : int
+  - external : tinyint
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+  - icon2 : mediumtext
+- **currency_conversion**
+  - id : int (PK)
+  - currencyID : int
+  - currencyToID : int
+  - amount : int
+  - autoConverts : tinyint
+  - isactive : tinyint
+- **damage_type**
+  - name : varchar (PK)
+  - resistance_stat : varchar
+  - power_stat : varchar
+  - accuracy_stat : varchar
+  - evasion_stat : varchar
+  - critic_chance_stat : varchar
+  - critic_power_stat : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **dialogue**
+  - id : int (PK)
+  - name : varchar
+  - openingDialogue : tinyint
+  - repeatable : tinyint
+  - prereqDialogue : int
+  - prereqQuest : int
+  - prereqFaction : int
+  - prereqFactionStance : int
+  - reactionAutoStart : tinyint
+  - text : text
+  - audioClip : varchar
+  - option1text : varchar
+  - option1action : varchar
+  - option1actionID : int
+  - option1itemReq : int
+  - option2text : varchar
+  - option2action : varchar
+  - option2actionID : int
+  - option2itemReq : int
+  - option3text : varchar
+  - option3action : varchar
+  - option3actionID : int
+  - option3itemReq : int
+  - option4text : varchar
+  - option4action : varchar
+  - option4actionID : int
+  - option4itemReq : int
+  - option5text : varchar
+  - option5action : varchar
+  - option5actionID : int
+  - option5itemReq : int
+  - option6text : varchar
+  - option6action : varchar
+  - option6actionID : int
+  - option6itemReq : int
+  - option7text : varchar
+  - option7action : varchar
+  - option7actionID : int
+  - option7itemReq : int
+  - option8text : varchar
+  - option8action : varchar
+  - option8actionID : int
+  - option8itemReq : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **dialogue_actions**
+  - id : int (PK)
+  - dialogueID : int
+  - actionOrder : int
+  - reqOpenedQuest : int
+  - reqCompletedQuest : int
+  - excludingQuest : int
+  - audioClip : varchar
+  - text : varchar
+  - action : varchar
+  - actionID : int
+  - itemReq : int
+  - itemReqConsume : tinyint
+  - currency : int
+  - currencyAmount : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **dialogue_actions_requirement**
+  - id : int (PK)
+  - dialogue_action_id : int
+  - editor_option_type_id : int
+  - editor_option_choice_type_id : varchar
+  - required_value : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : timestamp
+- **editor_option**
+  - id : int (PK)
+  - optionType : varchar
+  - deletable : tinyint
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **editor_option_choice**
+  - id : int (PK)
+  - optionTypeID : int
+  - choice : varchar
+  - deletable : tinyint
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **effects**
+  - id : int (PK)
+  - name : varchar
+  - displayName : varchar
+  - icon : varchar
+  - icon2 : mediumtext
+  - effectMainType : varchar
+  - effectType : varchar
+  - isBuff : tinyint
+  - skillType : int
+  - skillLevelMod : float
+  - passive : tinyint
+  - stackLimit : int
+  - stackTime : tinyint
+  - allowMultiple : tinyint
+  - duration : float
+  - pulseCount : int
+  - tooltip : varchar
+  - bonusEffectReq : int
+  - bonusEffectReqConsumed : tinyint
+  - bonusEffect : int
+  - removeBonusWhenEffectRemoved : tinyint
+  - pulseCoordEffect : varchar
+  - intValue1 : int
+  - intValue2 : int
+  - intValue3 : int
+  - intValue4 : int
+  - intValue5 : int
+  - floatValue1 : float
+  - floatValue2 : float
+  - floatValue3 : float
+  - floatValue4 : float
+  - floatValue5 : float
+  - stringValue1 : varchar
+  - stringValue2 : varchar
+  - stringValue3 : varchar
+  - stringValue4 : varchar
+  - stringValue5 : varchar
+  - boolValue1 : tinyint
+  - boolValue2 : tinyint
+  - boolValue3 : tinyint
+  - boolValue4 : tinyint
+  - boolValue5 : tinyint
+  - chance : float
+  - group_tags : text
+  - interruption_chance : float
+  - interruption_chance_max : float
+  - interruption_all : tinyint
+  - show_effect : tinyint
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **effects_triggers**
+  - id : int (PK)
+  - name : varchar
+  - event_type : int
+  - tags : text
+  - race : int
+  - class : int
+  - action_type : tinyint
+  - chance_min : float
+  - chance_max : float
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **effects_triggers_actions**
+  - id : int (PK)
+  - effects_triggers_id : int
+  - target : int
+  - ability : int
+  - effect : int
+  - mod_v : int
+  - mod_p : float
+  - chance_min : float
+  - chance_max : float
+- **events**
+  - id : int (PK)
+  - name : varchar
+  - data_type : varchar
+  - save_data : tinyint
+  - description : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **factions**
+  - id : int (PK)
+  - category : int
+  - name : varchar
+  - factionGroup : varchar
+  - public : tinyint
+  - defaultStance : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **faction_stances**
+  - id : int (PK)
+  - factionID : int
+  - otherFaction : int
+  - defaultStance : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **game_setting**
+  - id : int (PK)
+  - name : varchar
+  - datatype : varchar
+  - value : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **global_events**
+  - id : int (PK)
+  - name : varchar
+  - description : text
+  - start_year : int
+  - start_month : int
+  - start_day : int
+  - start_hour : int
+  - start_minute : int
+  - end_year : int
+  - end_month : int
+  - end_day : int
+  - end_hour : int
+  - end_minute : int
+  - icon : varchar
+  - icon2 : mediumtext
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **global_events_bonuses**
+  - id : int (PK)
+  - global_event_id : int
+  - bonus_settings_id : int
+  - value : int
+  - valuep : float
+- **graveyard**
+  - id : int (PK)
+  - name : varchar
+  - instance : int
+  - locX : float
+  - locY : float
+  - locZ : float
+  - factionReq : int
+  - factionRepReq : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **guild_level_requirements**
+  - id : int (PK)
+  - level : int
+  - item_id : int
+  - count : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **guild_level_settings**
+  - id : int (PK)
+  - level : int
+  - members_num : int
+  - merchant_table : int
+  - warehouse_num_slots : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **interactive_object**
+  - id : int (PK)
+  - name : varchar
+  - gameObject : varchar
+  - instance : int
+  - locX : float
+  - locY : float
+  - locZ : float
+  - interactionType : varchar
+  - interactionID : int
+  - interactionData1 : varchar
+  - interactionData2 : varchar
+  - interactionData3 : varchar
+  - questReqID : int
+  - interactTimeReq : float
+  - interactDistance : float
+  - coordEffect : varchar
+  - respawnTime : int
+  - profileId : int
+  - despawnDelay : float
+  - despawnTime : float
+  - makeBusy : tinyint
+  - useLimit : int
+  - minLevel : int
+  - maxLevel : int
+  - itemReq : int
+  - itemCountReq : int
+  - itemReqGet : tinyint
+  - currencyReq : int
+  - currencyCountReq : int
+  - currencyReqGet : tinyint
+  - icon : varchar
+  - icon2 : mediumtext
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **interactive_object_coordeffects**
+  - id : int (PK)
+  - objId : int
+  - coordEffect : varchar
+  - order : int
+- **item_audio_profile**
+  - id : int (PK)
+  - name : varchar
+  - use_event : varchar
+  - drag_begin_event : varchar
+  - drag_end_event : varchar
+  - delete_event : varchar
+  - broke_event : varchar
+  - pick_up_event : varchar
+  - fall_event : varchar
+  - drop_event : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **item_enchant_profile**
+  - id : int (PK)
+  - Name : varchar
+  - level : int (PK)
+  - percentage : tinyint
+  - all_stats : tinyint
+  - add_not_exist : tinyint
+  - stat_value : int
+  - chance : float
+  - lower_by : tinyint
+  - lower_to : smallint
+  - cost : int
+  - currency : int
+  - damage : int
+  - damagep : int
+  - effect1valuep : int
+  - effect1name : varchar
+  - effect1value : int
+  - effect2valuep : int
+  - effect2name : varchar
+  - effect2value : int
+  - effect3valuep : int
+  - effect3name : varchar
+  - effect3value : int
+  - effect4valuep : int
+  - effect4name : varchar
+  - effect4value : int
+  - effect5valuep : int
+  - effect5name : varchar
+  - effect5value : int
+  - effect6valuep : int
+  - effect6name : varchar
+  - effect6value : int
+  - effect7valuep : int
+  - effect7name : varchar
+  - effect7value : int
+  - effect8valuep : int
+  - effect8name : varchar
+  - effect8value : int
+  - effect9valuep : int
+  - effect9name : varchar
+  - effect9value : int
+  - effect10valuep : int
+  - effect10name : varchar
+  - effect10value : int
+  - effect11valuep : int
+  - effect11name : varchar
+  - effect11value : int
+  - effect12valuep : int
+  - effect12name : varchar
+  - effect12value : int
+  - effect13valuep : int
+  - effect13name : varchar
+  - effect13value : int
+  - effect14valuep : int
+  - effect14name : varchar
+  - effect14value : int
+  - effect15valuep : int
+  - effect15name : varchar
+  - effect15value : int
+  - effect16valuep : int
+  - effect16name : varchar
+  - effect16value : int
+  - effect17valuep : int
+  - effect17name : varchar
+  - effect17value : int
+  - effect18valuep : int
+  - effect18name : varchar
+  - effect18value : int
+  - effect19valuep : int
+  - effect19name : varchar
+  - effect19value : int
+  - effect20valuep : int
+  - effect20name : varchar
+  - effect20value : int
+  - effect21valuep : int
+  - effect21name : varchar
+  - effect21value : int
+  - effect22valuep : int
+  - effect22name : varchar
+  - effect22value : int
+  - effect23valuep : int
+  - effect23name : varchar
+  - effect23value : int
+  - effect24valuep : int
+  - effect24name : varchar
+  - effect24value : int
+  - effect25valuep : int
+  - effect25name : varchar
+  - effect25value : int
+  - effect26valuep : int
+  - effect26name : varchar
+  - effect26value : int
+  - effect27valuep : int
+  - effect27name : varchar
+  - effect27value : int
+  - effect28valuep : int
+  - effect28name : varchar
+  - effect28value : int
+  - effect29valuep : int
+  - effect29name : varchar
+  - effect29value : int
+  - effect30valuep : int
+  - effect30name : varchar
+  - effect30value : int
+  - effect31valuep : int
+  - effect31name : varchar
+  - effect31value : int
+  - effect32valuep : int
+  - effect32name : varchar
+  - effect32value : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+  - gear_score : int
+  - gear_scorep : int
+- **item_quality**
+  - id : int (PK)
+  - name : varchar
+  - cost : int
+  - chance : int
+- **item_set_items**
+  - id : int (PK)
+  - set_id : int
+  - template_id : int
+  - isactive : tinyint
+- **item_set_level**
+  - id : int (PK)
+  - set_id : int
+  - number_of_parts : int
+  - damage : int
+  - damagep : int
+  - effect1valuep : int
+  - effect1name : varchar
+  - effect1value : int
+  - effect2valuep : int
+  - effect2name : varchar
+  - effect2value : int
+  - effect3valuep : int
+  - effect3name : varchar
+  - effect3value : int
+  - effect4valuep : int
+  - effect4name : varchar
+  - effect4value : int
+  - effect5valuep : int
+  - effect5name : varchar
+  - effect5value : int
+  - effect6valuep : int
+  - effect6name : varchar
+  - effect6value : int
+  - effect7valuep : int
+  - effect7name : varchar
+  - effect7value : int
+  - effect8valuep : int
+  - effect8name : varchar
+  - effect8value : int
+  - effect9valuep : int
+  - effect9name : varchar
+  - effect9value : int
+  - effect10valuep : int
+  - effect10name : varchar
+  - effect10value : int
+  - effect11valuep : int
+  - effect11name : varchar
+  - effect11value : int
+  - effect12valuep : int
+  - effect12name : varchar
+  - effect12value : int
+  - effect13valuep : int
+  - effect13name : varchar
+  - effect13value : int
+  - effect14valuep : int
+  - effect14name : varchar
+  - effect14value : int
+  - effect15valuep : int
+  - effect15name : varchar
+  - effect15value : int
+  - effect16valuep : int
+  - effect16name : varchar
+  - effect16value : int
+  - effect17valuep : int
+  - effect17name : varchar
+  - effect17value : int
+  - effect18valuep : int
+  - effect18name : varchar
+  - effect18value : int
+  - effect19valuep : int
+  - effect19name : varchar
+  - effect19value : int
+  - effect20valuep : int
+  - effect20name : varchar
+  - effect20value : int
+  - effect21valuep : int
+  - effect21name : varchar
+  - effect21value : int
+  - effect22valuep : int
+  - effect22name : varchar
+  - effect22value : int
+  - effect23valuep : int
+  - effect23name : varchar
+  - effect23value : int
+  - effect24valuep : int
+  - effect24name : varchar
+  - effect24value : int
+  - effect25valuep : int
+  - effect25name : varchar
+  - effect25value : int
+  - effect26valuep : int
+  - effect26name : varchar
+  - effect26value : int
+  - effect27valuep : int
+  - effect27name : varchar
+  - effect27value : int
+  - effect28valuep : int
+  - effect28name : varchar
+  - effect28value : int
+  - effect29valuep : int
+  - effect29name : varchar
+  - effect29value : int
+  - effect30valuep : int
+  - effect30name : varchar
+  - effect30value : int
+  - effect31valuep : int
+  - effect31name : varchar
+  - effect31value : int
+  - effect32valuep : int
+  - effect32name : varchar
+  - effect32value : int
+- **item_set_profile**
+  - id : int (PK)
+  - name : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **item_slots**
+  - id : int (PK)
+  - name : varchar
+  - type : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **item_slots_group**
+  - id : int (PK)
+  - name : varchar
+  - all_slots : tinyint
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **item_slots_in_group**
+  - id : int (PK)
+  - slot_group_id : int
+  - slot_id : int
+- **item_slots_sets**
+  - id : int (PK)
+  - slot_id : int
+  - set_id : int
+  - race : int
+  - class : int
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **item_templates**
+  - id : int (PK)
+  - name : varchar
+  - icon : varchar
+  - icon2 : mediumtext
+  - category : varchar
+  - subcategory : varchar
+  - itemType : varchar
+  - subType : varchar
+  - slot : varchar
+  - display : varchar
+  - slot1 : varchar
+  - drawWeaponEffect1 : text
+  - drawWeaponTime1 : int
+  - holsteringWeaponEffect1 : text
+  - holsteringWeaponTime1 : int
+  - slot2 : varchar
+  - drawWeaponEffect2 : text
+  - drawWeaponTime2 : int
+  - holsteringWeaponEffect2 : text
+  - holsteringWeaponTime2 : int
+  - slot3 : varchar
+  - drawWeaponEffect3 : text
+  - drawWeaponTime3 : int
+  - holsteringWeaponEffect3 : text
+  - holsteringWeaponTime3 : int
+  - slot4 : varchar
+  - drawWeaponEffect4 : text
+  - drawWeaponTime4 : int
+  - holsteringWeaponEffect4 : text
+  - holsteringWeaponTime4 : int
+  - slot5 : varchar
+  - drawWeaponEffect5 : text
+  - drawWeaponTime5 : int
+  - holsteringWeaponEffect5 : text
+  - holsteringWeaponTime5 : int
+  - slot6 : varchar
+  - drawWeaponEffect6 : text
+  - drawWeaponTime6 : int
+  - holsteringWeaponEffect6 : text
+  - holsteringWeaponTime6 : int
+  - slot7 : varchar
+  - drawWeaponEffect7 : text
+  - drawWeaponTime7 : int
+  - holsteringWeaponEffect7 : text
+  - holsteringWeaponTime7 : int
+  - slot8 : varchar
+  - drawWeaponEffect8 : text
+  - drawWeaponTime8 : int
+  - holsteringWeaponEffect8 : text
+  - holsteringWeaponTime8 : int
+  - slot9 : varchar
+  - drawWeaponEffect9 : text
+  - drawWeaponTime9 : int
+  - holsteringWeaponEffect9 : text
+  - holsteringWeaponTime9 : int
+  - slot10 : varchar
+  - drawWeaponEffect10 : text
+  - drawWeaponTime10 : int
+  - holsteringWeaponEffect10 : text
+  - holsteringWeaponTime10 : int
+  - itemQuality : tinyint
+  - binding : tinyint
+  - isUnique : tinyint
+  - stackLimit : int
+  - duration : int
+  - purchaseCurrency : tinyint
+  - purchaseCost : bigint
+  - sellable : tinyint
+  - damage : int
+  - damageMax : int
+  - damageType : varchar
+  - delay : float
+  - toolTip : varchar
+  - triggerEvent : varchar
+  - triggerAction1Type : varchar
+  - triggerAction1Data : varchar
+  - effect1type : varchar
+  - effect1name : varchar
+  - effect1value : varchar
+  - effect2type : varchar
+  - effect2name : varchar
+  - effect2value : varchar
+  - effect3type : varchar
+  - effect3name : varchar
+  - effect3value : varchar
+  - effect4type : varchar
+  - effect4name : varchar
+  - effect4value : varchar
+  - effect5type : varchar
+  - effect5name : varchar
+  - effect5value : varchar
+  - effect6type : varchar
+  - effect6name : varchar
+  - effect6value : varchar
+  - effect7type : varchar
+  - effect7name : varchar
+  - effect7value : varchar
+  - effect8type : varchar
+  - effect8name : varchar
+  - effect8value : varchar
+  - effect9type : varchar
+  - effect9name : varchar
+  - effect9value : varchar
+  - effect10type : varchar
+  - effect10name : varchar
+  - effect10value : varchar
+  - effect11type : varchar
+  - effect11name : varchar
+  - effect11value : varchar
+  - effect12type : varchar
+  - effect12name : varchar
+  - effect12value : varchar
+  - effect13type : varchar
+  - effect13name : varchar
+  - effect13value : varchar
+  - effect14type : varchar
+  - effect14name : varchar
+  - effect14value : varchar
+  - effect15type : varchar
+  - effect15name : varchar
+  - effect15value : varchar
+  - effect16type : varchar
+  - effect16name : varchar
+  - effect16value : varchar
+  - effect17type : varchar
+  - effect17name : varchar
+  - effect17value : varchar
+  - effect18type : varchar
+  - effect18name : varchar
+  - effect18value : varchar
+  - effect19type : varchar
+  - effect19name : varchar
+  - effect19value : varchar
+  - effect20type : varchar
+  - effect20name : varchar
+  - effect20value : varchar
+  - effect21type : varchar
+  - effect21name : varchar
+  - effect21value : varchar
+  - effect22type : varchar
+  - effect22name : varchar
+  - effect22value : varchar
+  - effect23type : varchar
+  - effect23name : varchar
+  - effect23value : varchar
+  - effect24type : varchar
+  - effect24name : varchar
+  - effect24value : varchar
+  - effect25type : varchar
+  - effect25name : varchar
+  - effect25value : varchar
+  - effect26type : varchar
+  - effect26name : varchar
+  - effect26value : varchar
+  - effect27type : varchar
+  - effect27name : varchar
+  - effect27value : varchar
+  - effect28type : varchar
+  - effect28name : varchar
+  - effect28value : varchar
+  - effect29type : varchar
+  - effect29name : varchar
+  - effect29value : varchar
+  - effect30type : varchar
+  - effect30name : varchar
+  - effect30value : varchar
+  - effect31type : varchar
+  - effect31name : varchar
+  - effect31value : varchar
+  - effect32type : varchar
+  - effect32name : varchar
+  - effect32value : varchar
+  - actionBarAllowed : tinyint
+  - enchant_profile_id : int
+  - weapon_profile_id : int
+  - auctionHouse : tinyint
+  - skillExp : int
+  - gear_score : int
+  - weight : int
+  - durability : int
+  - autoattack : int
+  - socket_type : varchar
+  - ammotype : int
+  - death_loss : int
+  - parry : tinyint
+  - oadelete : tinyint
+  - passive_ability : int
+  - shopSlots : int
+  - shopModel : varchar
+  - shopTag : varchar
+  - numShops : int
+  - shopDestroyOnLogOut : tinyint
+  - shopMobTemplate : int
+  - shopTimeOut : int
+  - repairable : tinyint
+  - ground_prefab : varchar
+  - audio_profile_id : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **item_templates_options**
+  - id : int (PK)
+  - item_id : int
+  - editor_option_type_id : int
+  - editor_option_choice_type_id : varchar
+  - required_value : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : timestamp
+- **item_weights**
+  - id : bigint (PK)
+  - name : varchar
+  - prefix : tinyint
+  - stat1 : varchar
+  - weight1 : int
+  - stat2 : varchar
+  - weight2 : int
+  - stat3 : varchar
+  - weight3 : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **level_xp_requirements**
+  - xpProfile : int (PK)
+  - level : int (PK)
+  - xpRequired : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+  - reward_template_id : int
+- **level_xp_requirements_rewards**
+  - reward_id : int (PK)
+  - reward_template_id : int
+  - reward_type : varchar
+  - reward_value : int
+  - reward_amount : int
+  - give_once : tinyint
+  - on_level_down : tinyint
+  - isactive : tinyint
+- **level_xp_requirements_reward_templates**
+  - reward_template_id : int (PK)
+  - reward_template_name : varchar
+  - reward_mail_subject : varchar
+  - reward_mail_message : text
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **level_xp_requirements_templates**
+  - xpProfile : int (PK)
+  - xpProfile_name : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **loot_tables**
+  - id : int (PK)
+  - name : varchar
+  - item1 : int
+  - item1count : int
+  - item1chance : float
+  - item2 : int
+  - item2count : int
+  - item2chance : float
+  - item3 : int
+  - item3count : int
+  - item3chance : float
+  - item4 : int
+  - item4count : int
+  - item4chance : float
+  - item5 : int
+  - item5count : int
+  - item5chance : float
+  - item6 : int
+  - item6count : int
+  - item6chance : float
+  - item7 : int
+  - item7count : int
+  - item7chance : float
+  - item8 : int
+  - item8count : int
+  - item8chance : float
+  - item9 : int
+  - item9count : int
+  - item9chance : float
+  - item10 : int
+  - item10count : int
+  - item10chance : float
+  - category : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **loot_table_items**
+  - id : int (PK)
+  - loot_table_id : int
+  - item : int
+  - count : int
+  - count_max : int
+  - chance : float
+- **merchant_item**
+  - id : int (PK)
+  - tableID : int
+  - itemID : int
+  - count : int
+  - refreshTime : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **merchant_tables**
+  - id : int (PK)
+  - name : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **mob_ability**
+  - id : int (PK)
+  - mob_ability_order : int
+  - behavior_id : int
+  - abilities : text
+  - minAbilityRangePercentage : float
+  - maxAbilityRangePercentage : float
+  - mob_ability_type : int
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **mob_ability_conditions**
+  - id : int (PK)
+  - conditions_group_id : int
+  - type : int
+  - distance : float
+  - less : tinyint
+  - stat_name : varchar
+  - stat_value : float
+  - stat_vitality_percentage : tinyint
+  - target : int
+  - effect_tag_id : int
+  - on_target : tinyint
+  - combat_state : tinyint
+  - death_state : tinyint
+  - trigger_event_Id : int
+  - target_number : int
+  - target_ally : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **mob_ability_conditions_group**
+  - id : int (PK)
+  - group_order : int
+  - mob_ability_id : int
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **mob_behaviors**
+  - id : int (PK)
+  - profile_id : int
+  - behavior_order : int
+  - type : int
+  - flee_type : int
+  - flee_loc_x : float
+  - flee_loc_y : float
+  - flee_loc_z : float
+  - ability_interval : int
+  - mob_tag : int
+  - ignore_chase_distance : tinyint
+  - weapon : int
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **mob_behavior_points**
+  - id : int (PK)
+  - behavior_id : int
+  - loc_x : float
+  - loc_y : float
+  - loc_z : float
+- **mob_behavior_profile**
+  - id : int (PK)
+  - name : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **mob_display**
+  - id : int (PK)
+  - name : varchar
+  - prefab : varchar
+  - race : varchar
+  - gender : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **mob_loot**
+  - id : int (PK)
+  - category : int
+  - mobTemplate : int
+  - lootTable : int
+  - dropChance : float
+  - count : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **mob_stat**
+  - id : int (PK)
+  - mobTemplate : int
+  - stat : varchar
+  - value : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **mob_templates**
+  - id : int (PK)
+  - category : int
+  - name : varchar
+  - displayName : varchar
+  - subTitle : varchar
+  - mobType : int
+  - display1 : varchar
+  - display2 : varchar
+  - display3 : varchar
+  - display4 : varchar
+  - scale : float
+  - hitbox : int
+  - baseAnimationState : int
+  - faction : int
+  - attackable : tinyint
+  - minLevel : int
+  - maxLevel : int
+  - species : varchar
+  - subSpecies : varchar
+  - skinningLootTable : int
+  - skinningLevelReq : int
+  - skinningLevelMax : int
+  - skinningSkillId : int
+  - skinningSkillExp : int
+  - skinningWeaponReq : varchar
+  - skinningHarvestTime : decimal
+  - questCategory : varchar
+  - specialUse : varchar
+  - speed_walk : float
+  - speed_run : float
+  - minDmg : int
+  - maxDmg : int
+  - attackSpeed : float
+  - dmgType : varchar
+  - primaryWeapon : int
+  - secondaryWeapon : int
+  - autoAttack : int
+  - attackDistance : float
+  - ability0 : int
+  - abilityStatReq0 : varchar
+  - abilityStatPercent0 : int
+  - ability1 : int
+  - abilityStatReq1 : varchar
+  - abilityStatPercent1 : int
+  - ability2 : int
+  - abilityStatReq2 : varchar
+  - abilityStatPercent2 : int
+  - exp : int
+  - addExplev : int
+  - pet_count_stat : int
+  - race_id : int
+  - class_id : int
+  - gender_id : int
+  - aggro_radius : int
+  - send_link_aggro : tinyint
+  - get_link_aggro : tinyint
+  - link_aggro_range : int
+  - chasing_distance : int
+  - tags : text
+  - behavior_profile_id : int
+  - stat_profile_id : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **npcdisplay**
+  - id : int (PK)
+  - name : varchar
+  - race : varchar
+  - gender : varchar
+  - skinColour : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **patrol_path**
+  - id : int (PK)
+  - name : varchar
+  - startingPoint : tinyint
+  - travelReverse : tinyint
+  - locX : float
+  - locY : float
+  - locZ : float
+  - lingerTime : float
+  - nextPoint : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **pet_profile**
+  - id : int (PK)
+  - name : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **pet_profile_level**
+  - id : int (PK)
+  - profile_id : int
+  - level : int
+  - exp : int
+  - template_id : int
+  - coordEffect : varchar
+  - slot_profile_id : int
+- **quests**
+  - id : int (PK)
+  - category : int
+  - name : varchar
+  - faction : int
+  - chain : varchar
+  - level : int
+  - zone : varchar
+  - numGrades : int
+  - repeatable : tinyint
+  - description : varchar
+  - objectiveText : varchar
+  - progressText : varchar
+  - deliveryItem1 : int
+  - deliveryItem2 : int
+  - deliveryItem3 : int
+  - questPrereq : int
+  - questStartedReq : int
+  - completionText : varchar
+  - experience : int
+  - item1 : int
+  - item1count : int
+  - item2 : int
+  - item2count : int
+  - item3 : int
+  - item3count : int
+  - item4 : int
+  - item4count : int
+  - item5 : int
+  - item5count : int
+  - item6 : int
+  - item6count : int
+  - item7 : int
+  - item7count : int
+  - item8 : int
+  - item8count : int
+  - chooseItem1 : int
+  - chooseItem1count : int
+  - chooseItem2 : int
+  - chooseItem2count : int
+  - chooseItem3 : int
+  - chooseItem3count : int
+  - chooseItem4 : int
+  - chooseItem4count : int
+  - chooseitem5 : int
+  - chooseitem5count : int
+  - chooseitem6 : int
+  - chooseitem6count : int
+  - chooseitem7 : int
+  - chooseitem7count : int
+  - chooseitem8 : int
+  - chooseitem8count : int
+  - currency1 : int
+  - currency1count : int
+  - currency2 : int
+  - currency2count : int
+  - rep1 : int
+  - rep1gain : int
+  - rep2 : int
+  - rep2gain : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **quest_items**
+  - id : int (PK)
+  - quest_id : int
+  - item : int
+  - count : int
+  - choose : tinyint
+  - rewardLevel : int
+- **quest_objectives**
+  - id : int (PK)
+  - questID : int
+  - primaryObjective : tinyint
+  - objectiveType : varchar
+  - target : int
+  - targetCount : int
+  - targetText : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+  - targets : varchar
+- **quest_requirement**
+  - id : int (PK)
+  - quest_id : int
+  - editor_option_type_id : int
+  - editor_option_choice_type_id : varchar
+  - required_value : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : timestamp
+- **ranking1**
+  - id : int (PK)
+  - obj_id : int
+  - data : int
+  - blobdata : blob
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **ranking_settings**
+  - id : int (PK)
+  - type : int
+  - name : varchar
+  - count : int
+  - description : varchar
+  - isactive : tinyint
+- **region**
+  - id : int (PK)
+  - name : varchar
+  - instance : int
+  - locX : float
+  - locY : float
+  - locZ : float
+  - regionType : varchar
+  - actionID : int
+  - actionData1 : varchar
+  - actionData2 : varchar
+  - actionData3 : varchar
+  - isactive : tinyint
+  - creationtimetamp : timestamp
+  - updatetimestamp : datetime
+- **region_shape**
+  - id : int (PK)
+  - regionID : int
+  - locX : float
+  - locY : float
+  - locZ : float
+  - shape : varchar
+  - size1 : float
+  - size2 : float
+  - size3 : float
+  - loc2X : float
+  - loc2Y : float
+  - loc2Z : float
+  - orientX : float
+  - orientY : float
+  - orientZ : float
+  - orientW : float
+  - isactive : tinyint
+  - creationtimetamp : timestamp
+  - updatetimestamp : datetime
+- **resource_drop**
+  - id : int (PK)
+  - resourceSubProfileId : int
+  - item : int
+  - min : int
+  - max : int
+  - chance : float
+  - chanceMax : float
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **resource_grids**
+  - id : int (PK)
+  - type : varchar
+  - count : int
+  - locX : float
+  - locY : float
+  - locZ : float
+  - rotation : float
+  - instance : varchar
+  - resource1_type : varchar
+  - resource1_chance : int
+  - resource2_type : varchar
+  - resource2_chance : int
+  - resource3_type : varchar
+  - resource3_chance : int
+  - resource4_type : varchar
+  - resource4_chance : int
+  - resource5_type : varchar
+  - resource5_chance : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **resource_node_profile**
+  - id : int (PK)
+  - name : varchar
+  - spawnPercentage : float
+  - spawnPecentageMax : float
+  - maxHarvestDistance : float
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **resource_node_spawn**
+  - id : int (PK)
+  - instance : varchar
+  - resourceTemplate : int
+  - respawnTime : int
+  - locX : float
+  - locY : float
+  - locZ : float
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **resource_node_sub_profile**
+  - id : int (PK)
+  - profileId : int
+  - priority : int
+  - priorityMax : int
+  - skill : int
+  - skillLevel : int
+  - skillLevelMax : int
+  - skillExp : int
+  - weaponReq : varchar
+  - equipped : tinyint
+  - gameObject : varchar
+  - harvestCoordEffect : varchar
+  - activateCoordeffect : varchar
+  - deactivateCoordeffect : varchar
+  - respawnTime : int
+  - respawnTimeMax : int
+  - harvestCount : int
+  - harvestTimeReq : float
+  - cooldown : float
+  - deactivationDelay : float
+  - lootCount : int
+  - ensureLoot : tinyint
+  - cursorIcon : varchar
+  - cursorIcon2 : mediumtext
+  - selectedIcon : varchar
+  - selectedIcon2 : mediumtext
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **resource_node_template**
+  - id : int (PK)
+  - name : varchar
+  - skill : int
+  - skillLevel : int
+  - skillLevelMax : int
+  - skillExp : int
+  - weaponReq : varchar
+  - equipped : tinyint
+  - gameObject : varchar
+  - coordEffect : varchar
+  - instance : int
+  - respawnTime : int
+  - locX : float
+  - locY : float
+  - locZ : float
+  - harvestCount : int
+  - harvestTimeReq : float
+  - profileId : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **skills**
+  - id : int (PK)
+  - name : varchar
+  - icon : varchar
+  - aspect : int
+  - oppositeAspect : int
+  - mainAspectOnly : tinyint
+  - primaryStat : varchar
+  - primaryStatValue : int
+  - primaryStatInterval : int
+  - secondaryStat : varchar
+  - secondaryStatValue : int
+  - secondaryStatInterval : int
+  - thirdStat : varchar
+  - thirdStatValue : int
+  - thirdStatInterval : int
+  - fourthStat : varchar
+  - fourthStatValue : int
+  - fourthStatInterval : int
+  - maxLevel : int
+  - automaticallyLearn : tinyint
+  - skillPointCost : int
+  - parentSkill : int
+  - parentSkillLevelReq : int
+  - prereqSkill1 : int
+  - prereqSkill1Level : int
+  - prereqSkill2 : int
+  - prereqSkill2Level : int
+  - prereqSkill3 : int
+  - prereqSkill3Level : int
+  - playerLevelReq : int
+  - skill_profile_id : int
+  - type : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+  - icon2 : mediumtext
+  - talent : tinyint
+- **skill_ability_gain**
+  - id : int (PK)
+  - skillID : int
+  - skillLevelReq : int
+  - abilityID : int
+  - automaticallyLearn : tinyint
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **skill_profile**
+  - id : int (PK)
+  - type : int
+  - profile_name : varchar
+  - level_diff : text
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **skill_profile_levels**
+  - id : int (PK)
+  - profile_id : int
+  - level : int
+  - required_xp : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **slots_in_profile**
+  - id : int (PK)
+  - slot_profile_id : int
+  - slot_id : int
+- **slots_profile**
+  - id : int (PK)
+  - name : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **spawn_data**
+  - id : int (PK)
+  - category : int
+  - name : varchar
+  - mobTemplate : int
+  - mobTemplate2 : int
+  - mobTemplate3 : int
+  - mobTemplate4 : int
+  - mobTemplate5 : int
+  - markerName : varchar
+  - locX : float
+  - locY : float
+  - locZ : float
+  - orientX : float
+  - orientY : float
+  - orientZ : float
+  - orientW : float
+  - instance : int
+  - numSpawns : int
+  - spawnRadius : int
+  - respawnTime : int
+  - respawnTimeMax : int
+  - corpseDespawnTime : int
+  - spawnActiveStartHour : int
+  - spawnActiveEndHour : int
+  - alternateSpawnMobTemplate : int
+  - alternateSpawnMobTemplate2 : int
+  - alternateSpawnMobTemplate3 : int
+  - alternateSpawnMobTemplate4 : int
+  - alternateSpawnMobTemplate5 : int
+  - combat : tinyint
+  - roamRadius : int
+  - roamDelayMin : float
+  - roamDelayMax : float
+  - roamRollTimeEachTime : tinyint
+  - startsQuests : varchar
+  - endsQuests : varchar
+  - startsDialogues : varchar
+  - otherActions : varchar
+  - baseAction : varchar
+  - weaponSheathed : tinyint
+  - merchantTable : int
+  - patrolPath : int
+  - questOpenLootTable : int
+  - isChest : tinyint
+  - pickupItem : int
+  - shop_owner : bigint
+  - shop_oid : bigint
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **stat**
+  - id : int (PK)
+  - name : varchar
+  - type : int
+  - stat_function : varchar
+  - mob_base : int
+  - mob_level_increase : int
+  - mob_level_percent_increase : float
+  - min : int
+  - max : bigint
+  - maxstat : varchar
+  - canExceedMax : tinyint
+  - sharedWithGroup : tinyint
+  - shiftTarget : smallint
+  - shiftValue : int
+  - shiftReverseValue : int
+  - shiftInterval : int
+  - isShiftPercent : tinyint
+  - onMaxHit : varchar
+  - onMinHit : varchar
+  - shiftReq1 : varchar
+  - shiftReq1State : tinyint
+  - shiftReq1SetReverse : tinyint
+  - shiftReq2 : varchar
+  - shiftReq2State : tinyint
+  - shiftReq2SetReverse : tinyint
+  - shiftReq3 : varchar
+  - shiftReq3State : tinyint
+  - shiftReq3SetReverse : tinyint
+  - startPercent : int
+  - deathResetPercent : int
+  - releaseResetPercent : int
+  - sendToClient : tinyint
+  - serverPresent : tinyint
+  - onThreshold : varchar
+  - onThreshold2 : varchar
+  - onThreshold3 : varchar
+  - onThreshold4 : varchar
+  - onThreshold5 : varchar
+  - threshold : float
+  - threshold2 : float
+  - threshold3 : float
+  - threshold4 : float
+  - shiftModStat : varchar
+  - stat_precision : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **stat_link**
+  - id : int (PK)
+  - stat_id : int
+  - stat : varchar
+  - statTo : varchar
+  - pointsForChange : int
+  - changePerPoint : float
+  - isactive : tinyint
+- **stat_profile**
+  - id : int (PK)
+  - name : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **stat_profile_stats**
+  - id : int (PK)
+  - profile_id : int
+  - stat_id : int
+  - value : int
+  - level_increase : float
+  - level_percent_increase : float
+  - send_to_client : tinyint
+  - serverPresent : tinyint
+  - override_values : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **stat_thresholds**
+  - stat_function : varchar (PK)
+  - threshold : int (PK)
+  - num_per_point : int
+- **survivalarenatemplates**
+  - id : int (PK)
+  - numRounds : int
+  - round1Spawns : varchar
+  - round2Spawns : varchar
+  - round3Spawns : varchar
+  - round4Spawns : varchar
+  - round5Spawns : varchar
+  - round6Spawns : varchar
+  - round7Spawns : varchar
+  - round8Spawns : varchar
+  - round9Spawns : varchar
+  - round10Spawns : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **task**
+  - id : int (PK)
+  - name : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **users**
+  - username : varchar (PK)
+  - password : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **vip_level**
+  - id : int (PK)
+  - level : int
+  - name : varchar
+  - description : text
+  - max_points : bigint
+  - isactive : tinyint
+- **vip_level_bonuses**
+  - vip_level_id : int
+  - bonus_settings_id : int
+  - value : int
+  - valuep : float
+- **voxelands**
+  - id : int (PK)
+  - instance : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **voxeland_changes**
+  - id : int (PK)
+  - voxelandid : int
+  - x : int
+  - y : int
+  - z : int
+  - type : int
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **weapon_action_settings**
+  - id : int (PK)
+  - profile_id : int (PK)
+  - action_id : int
+  - slot : varchar
+  - ability_id : int
+  - action_type : int
+  - coordeffect : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **weapon_templates_profile**
+  - id : int (PK)
+  - name : varchar
+  - isactive : tinyint
+  - creationtimestamp : timestamp
+  - updatetimestamp : datetime
+- **weather_instance**
+  - id : int (PK)
+  - instance_id : int
+  - weather_profile_id : int
+  - month1 : tinyint
+  - month2 : tinyint
+  - month3 : tinyint
+  - month4 : tinyint
+  - month5 : tinyint
+  - month6 : tinyint
+  - month7 : tinyint
+  - month8 : tinyint
+  - month9 : tinyint
+  - month10 : tinyint
+  - month11 : tinyint
+  - month12 : tinyint
+  - priority : int
+- **weather_profile**
+  - id : int (PK)
+  - name : varchar
+  - temperature_min : float
+  - temperature_max : float
+  - humidity_min : float
+  - humidity_max : float
+  - wind_direction_min : float
+  - wind_direction_max : float
+  - wind_speed_min : float
+  - wind_speed_max : float
+  - wind_turbulence_min : float
+  - wind_turbulence_max : float
+  - fog_height_power_min : float
+  - fog_height_power_max : float
+  - fog_height_max : float
+  - fog_distance_power_min : float
+  - fog_distance_power_max : float
+  - fog_distance_max : float
+  - rain_power_min : float
+  - rain_power_max : float
+  - rain_power_terrain_min : float
+  - rain_power_terrain_max : float
+  - rain_min_height : float
+  - rain_max_height : float
+  - hail_power_min : float
+  - hail_power_max : float
+  - hail_power_terrain_min : float
+  - hail_power_terrain_max : float
+  - hail_min_height : float
+  - hail_max_height : float
+  - snow_power_min : float
+  - snow_power_max : float
+  - snow_power_terrain_min : float
+  - snow_power_terrain_max : float
+  - snow_min_height : float
+  - snow_age_min : float
+  - snow_age_max : float
+  - thunder_power_min : float
+  - thunder_power_max : float
+  - cloud_power_min : float
+  - cloud_power_max : float
+  - cloud_min_height : float
+  - cloud_max_height : float
+  - cloud_speed_min : float
+  - cloud_speed_max : float
+  - moon_phase_min : float
+  - moon_phase_max : float
+  - isactive : int
+  - priority : int
+- **weather_season**
+  - id : int (PK)
+  - instance_id : int
+  - season : int
+  - month1 : tinyint
+  - month2 : tinyint
+  - month3 : tinyint
+  - month4 : tinyint
+  - month5 : tinyint
+  - month6 : tinyint
+  - month7 : tinyint
+  - month8 : tinyint
+  - month9 : tinyint
+  - month10 : tinyint
+  - month11 : tinyint
+  - month12 : tinyint
