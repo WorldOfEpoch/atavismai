@@ -1,0 +1,39 @@
+{
+  "project": {
+    "projectName": "World Of Epoch",
+    "genre": "High Fantasy",
+    "tone": "Heroic, cohesive, PG-13, lore-driven",
+    "namingStyle": "Concise, evocative",
+    "restrictToAllowedRaces": true,
+    "allowedRaces": ["Human", "Elf", "Orc", "Dwarf"],
+    "allowedClasses": [],
+    "worldSummary": "Enter a summary of your world here."
+  },
+  "database": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "epochftp",
+    "password": "Scretnat123!",
+    "adminDb": "admin",
+    "atavismDb": "atavism",
+    "masterDb": "master",
+    "worldContentDb": "world_content"
+  },
+  "llm": {
+    "provider": "local-openai",
+    "endpoint": "http://localhost:11434/v1/chat/completions",
+    "model": "llama3.1:8b",
+    "apiKey": "",
+    "stream": true
+  },
+  "image": {
+    "provider": "automatic1111",
+    "endpoint": "http://localhost:7860",
+    "loraFolder": "",
+    "useReferenceImg": false,
+    "img2imgDenoise": 0.35,
+    "persistentPrompt": "",
+    "persistentNegative": "",
+    "loras": []
+  }
+}
