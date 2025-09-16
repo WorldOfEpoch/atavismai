@@ -64,7 +64,7 @@ namespace Atavism
                 SoundSystem.PlayMusic(musicObject.GetComponent<AudioSource>());
             UnityEngine.Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
-             UnityEngine.Cursor.SetCursor(cursorOverride,Vector2.zero, CursorMode.Auto);
+            UnityEngine.Cursor.SetCursor(cursorOverride, Vector2.zero, CursorMode.Auto);
         }
 
         private void OnEnable()
@@ -96,7 +96,7 @@ namespace Atavism
             AtavismEventSystem.UnregisterEvent("REGISTER_RESPONSE", this);
             AtavismEventSystem.UnregisterEvent("SETTINGS_LOADED", this);
         }
-     
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Return))
@@ -420,7 +420,7 @@ namespace Atavism
                     if (TMPUserField != null)
                         TMPUserField.text = regUsername;
                     if (TMPPassField != null)
-                        TMPPassField.text = regPassword; 
+                        TMPPassField.text = regPassword;
                     username = regUsername;
                     password = regPassword;
                     ShowLoginPanel();

@@ -1,0 +1,24 @@
+﻿using AwesomeTechnologies.VegetationSystem;
+using UnityEngine;
+
+namespace AwesomeTechnologies.Vegetation
+{
+    public class VegetationItemInstanceInfo : MonoBehaviour
+    {
+        public string VegetationItemInstanceID;
+        public Vector3 Position;
+        public Vector3 Scale;
+        public Quaternion Rotation;
+        public string VegetationItemID;
+        public VegetationType VegetationType;
+
+        public GameObject runtimePrefabSource;
+
+        public void MaskVegetationItem()
+        {
+            GameObject vegetationItemMaskObject = new() { name = "VegetationItemMask - " + name };
+            vegetationItemMaskObject.transform.position = Position;
+            vegetationItemMaskObject.AddComponent<VegetationItemMask>().SetVegetationItemInstanceInfo(this);
+        }
+    }
+}

@@ -1,0 +1,48 @@
+--------------------
+08/31/2023 -- MM/DD/YY
+Getting started / Info on limitations and what needs to be installed
+
+For: => "Vegetation Studio Pro: Beyond"
+
+--------------------
+Minimum engine version
+=> Unity 2022.3.3f1 or higher
+
+--------------------
+Ensure these packages are installed in the package manager (VSP-B will ask to install the mandatory ones)
+// Mandatory
+- Collections => 2.1.4 or higher (installs the others with it)
+-> Burst
+--> Mathematics
+- Splines => 2.5.1 or higher
+
+// Optional when needed
+- Post Processing v2 => 3.2.2 or higher
+
+--------------------
+Ensure these player defines are present (will install themselves usually)
+// Mandatory
+- VSP_PACKAGES
+- VEGETATION_STUDIO_PRO
+
+// Mandatory when using SRPs
+- USING_HDRP
+- USING_URP
+
+// Optional when needed
+- TOUCH_REACT
+
+--------------------
+For full functionality a graphics card that supports ShaderModel 5.0 is needed
+-> otherwise there will be few limitations
+
+--------------------
+It is recommended to check out the demo scene to:
+- learn about the system/-s and components and how they are/can be used
+- make sure everything is working correctly
+
+The (outdated) documentation and guides are also available at https://www.awesometech.no
+-> make sure to use the "Pro" section for most features
+--> some of the additional tools have their documentation in the non-pro section
+
+--------------------

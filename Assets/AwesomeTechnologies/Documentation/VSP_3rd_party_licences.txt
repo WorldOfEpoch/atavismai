@@ -1,0 +1,27 @@
+This asset is governed by the Asset Store EULA; however, the following components are governed by the licenses indicated below:
+
+Assets/AwesomeTechnologies/VegetationStudioPro/Editor/EditorUtility/External/CurveEditor
+MIT licence
+
+Assets/AwesomeTechnologies/VegetationStudioPro/Utility/VSP_ShaderPackager
+MIT licence
+
+Assets/AwesomeTechnologies/VegetationStudioPro/Runtime/Shaders/Resources/Stacks_Includes/VertexWind_Base_Stacked.surfshader
+Assets/AwesomeTechnologies/VegetationStudioPro/Runtime/Common/ShaderResources/HDWind
+Unity Companion License
+
+Assets/AwesomeTechnologies/VegetationStudioPro/Runtime/ScriptingUtility/External/Triangulator
+Creative Commons BY-SA 3.0 license. 
+https://creativecommons.org/licenses/by-sa/3.0/
+
+Assets/AwesomeTechnologies/VegetationStudioPro/Runtime/ScriptingUtility/External/Clipper
+Boost Software License - Version 1.0
+http://www.boost.org/LICENSE_1_0.txt 
+
+
+
+
+
+
+
+

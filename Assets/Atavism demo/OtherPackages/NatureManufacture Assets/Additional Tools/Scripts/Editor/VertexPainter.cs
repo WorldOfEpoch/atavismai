@@ -7,624 +7,502 @@ using UnityEngine.SceneManagement;
 
 public class VertexPainter : EditorWindow
 {
-    bool drawing = false;
-    bool showVertexColors = false;
-    bool showFlowMap = false;
-    GameObject currentDrawObject;
+	bool drawing = false;
+	bool showVertexColors = false;
+	bool showFlowMap = false;
+	GameObject currentDrawObject;
 
-    List<MeshFilter> meshFilters = new List<MeshFilter>();
-    List<Material> oldMaterials = new List<Material>();
+	List<MeshFilter> meshFilters = new List<MeshFilter> ();
+	List<Material> oldMaterials = new List<Material> ();
 
-    int toolbarInt = 0;
-    Color drawColor = Color.white;
-    float drawSize = 0.5f;
-    float opacity = 1f;
+	int toolbarInt = 0;
+	Color drawColor = Color.white;
+	float drawSize = 0.5f;
+	float opacity = 1f;
 
-    bool drawColorR = true;
-    bool drawColorG = true;
-    bool drawColorB = true;
-    bool drawColorA = true;
+	public float flowSpeed = 1f;
+	public float flowDirection = 0f;
 
-    public float flowSpeed = 1f;
-    public float flowDirection = 0f;
+	public string[] toolbarStrings = new string[] {
+		"Vertex Color",
+		"Flow Map\n[BETA]"
+	};
 
-    public string[] toolbarStrings = new string[] {
-        "Vertex Color",
-        "Flow Map"
-    };
+	[MenuItem ("Tools/Nature Manufacture/Vertex Painter")]
+	static void Init ()
+	{
+		// Get existing open window or if none, make a new one:
+		VertexPainter window = EditorWindow.GetWindow<VertexPainter> ("VertexPainter");
+		window.Show ();
+	}
 
-    [MenuItem("Tools/Nature Manufacture/Vertex Painter")]
-    static void Init()
-    {
-        // Get existing open window or if none, make a new one:
-        VertexPainter window = EditorWindow.GetWindow<VertexPainter>("VertexPainter");
-        window.Show();
-    }
+	void OnGUI ()
+	{
+		toolbarInt = GUILayout.Toolbar (toolbarInt, toolbarStrings);
 
-    void OnGUI()
-    {
-        toolbarInt = GUILayout.Toolbar(toolbarInt, toolbarStrings);
+		if (!drawing) {
+			if (GUILayout.Button ("Start Drawing")) {
+				if (Selection.activeGameObject != null) {
+					EditorSceneManager.MarkSceneDirty (SceneManager.GetActiveScene ());
+					meshFilters.Clear ();
+					MeshFilter[] filters = Selection.activeGameObject.GetComponentsInChildren<MeshFilter> ();
 
+					foreach (var item in filters) {
+						currentDrawObject = Selection.activeGameObject;
+						meshFilters.Add (item);
 
-        if (!drawing)
-        {
-            if (GUILayout.Button("Start Drawing"))
-            {
-                if (Selection.activeGameObject != null)
-                {
-                    EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
-                    meshFilters.Clear();
-                    MeshFilter[] filters = Selection.activeGameObject.GetComponentsInChildren<MeshFilter>();
+						drawing = true;
+						Tools.current = Tool.None;
 
-                    foreach (var item in filters)
-                    {
-                        currentDrawObject = Selection.activeGameObject;
-                        meshFilters.Add(item);
+						Undo.RecordObject (item.sharedMesh, "Start draw vertex");
+					}
 
-                        drawing = true;
-                        Tools.current = Tool.None;
+				}
+			}
+		}
 
-                        Undo.RecordObject(item.sharedMesh, "Start draw vertex");
-                    }
+		if (drawing) {
 
-                }
-            }
-        }
+			if (Selection.activeGameObject != currentDrawObject) {
+				StopDrawing ();
+			}
 
-        if (drawing)
-        {
-
-            if (Selection.activeGameObject != currentDrawObject)
-            {
-                StopDrawing();
-            }
-
-            if (GUILayout.Button("End Drawing"))
-            {
-                StopDrawing();
+			if (GUILayout.Button ("End Drawing")) {
+				StopDrawing ();
 
 
-            }
+			}
 
-            EditorGUILayout.Space();
+			EditorGUILayout.Space ();
 
-            if (toolbarInt == 0)
-            {
-                if (!showVertexColors)
-                {
-                    if (GUILayout.Button("Show vertex colors"))
-                    {
-                        if (!showFlowMap && !showVertexColors)
-                            oldMaterials.Clear();
+			if (toolbarInt == 0) {
+				if (!showVertexColors) {
+					if (GUILayout.Button ("Show vertex colors")) {
+						if (!showFlowMap && !showVertexColors)
+							oldMaterials.Clear ();
 
 
-                        for (int i = 0; i < meshFilters.Count; i++)
-                        {
-                            if (!showFlowMap && !showVertexColors)
-                                oldMaterials.Add(meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial);
-                            meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial = new Material(Shader.Find("NatureManufacture Shaders/Debug/Vertex color"));
-                        }
-                        ResetMaterial();
-                        showVertexColors = true;
-                    }
-                }
-                else
-                {
-                    if (GUILayout.Button("Hide vertex colors"))
-                    {
-                        ResetMaterial();
-                        for (int i = 0; i < meshFilters.Count; i++)
-                        {
-                            meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial = oldMaterials[i];
-                        }
-                        showVertexColors = false;
-                    }
-                }
-                if (GUILayout.Button("Reset colors"))
-                {
-                    RestartColor();
-                }
-                EditorGUILayout.HelpBox("River Auto Material -> R Wetness", MessageType.Info);
-            }
-            else
-            {
-                if (!showFlowMap)
-                {
-                    if (GUILayout.Button("Show  flow directions"))
-                    {
-                        if (!showFlowMap && !showVertexColors)
-                            oldMaterials.Clear();
+						for (int i = 0; i < meshFilters.Count; i++) {
+							if (!showFlowMap && !showVertexColors)
+								oldMaterials.Add (meshFilters [i].GetComponent<MeshRenderer> ().sharedMaterial);
+							meshFilters [i].GetComponent<MeshRenderer> ().sharedMaterial = new Material (Shader.Find ("NatureManufacture Shaders/Debug/Vertex color"));
+						}
+						ResetMaterial ();
+						showVertexColors = true;
+					}
+				} else {
+					if (GUILayout.Button ("Hide vertex colors")) {
+						ResetMaterial ();
+						for (int i = 0; i < meshFilters.Count; i++) {
+							meshFilters [i].GetComponent<MeshRenderer> ().sharedMaterial = oldMaterials [i];
+						}
+						showVertexColors = false;
+					}
+				}
+				if (GUILayout.Button ("Reset colors")) {
+					RestartColor ();
+				}
+				EditorGUILayout.HelpBox ("River Auto Material -> R Wetness", MessageType.Info);
+			} else {
+				if (!showFlowMap) {
+					if (GUILayout.Button ("Show  flow directions")) {
+						if (!showFlowMap && !showVertexColors)
+							oldMaterials.Clear ();
 
 
-                        for (int i = 0; i < meshFilters.Count; i++)
-                        {
-                            if (!showFlowMap && !showVertexColors)
-                                oldMaterials.Add(meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial);
-
-                            meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial = new Material(Shader.Find("NatureManufacture Shaders/Debug/Flowmap Direction"));
-                            meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial.SetTexture("_Direction", Resources.Load<Texture2D>("Debug_Arrow"));
-                        }
-                        ResetMaterial();
-                        showFlowMap = true;
-                    }
-                }
-                else
-                {
-                    if (GUILayout.Button("Hide flow directions"))
-                    {
-                        ResetMaterial();
-                        for (int i = 0; i < meshFilters.Count; i++)
-                        {
-                            meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial = oldMaterials[i];
-                        }
-                        showFlowMap = false;
-                    }
-                }
-                if (GUILayout.Button("Reset flow"))
-                {
-                    RestartFlow();
-                }
-            }
+						for (int i = 0; i < meshFilters.Count; i++) {
+							if (!showFlowMap && !showVertexColors)
+								oldMaterials.Add (meshFilters [i].GetComponent<MeshRenderer> ().sharedMaterial);
+							
+							meshFilters [i].GetComponent<MeshRenderer> ().sharedMaterial = new Material (Shader.Find ("NatureManufacture Shaders/Debug/Flowmap Direction"));
+							meshFilters [i].GetComponent<MeshRenderer> ().sharedMaterial.SetTexture ("_Direction", Resources.Load<Texture2D> ("Debug_Arrow"));
+						}
+						ResetMaterial ();
+						showFlowMap = true;
+					}
+				} else {
+					if (GUILayout.Button ("Hide flow directions")) {
+						ResetMaterial ();
+						for (int i = 0; i < meshFilters.Count; i++) {
+							meshFilters [i].GetComponent<MeshRenderer> ().sharedMaterial = oldMaterials [i];
+						}
+						showFlowMap = false;
+					}
+				}
+				if (GUILayout.Button ("Reset flow")) {
+					RestartFlow ();
+				}
+			}
 
 
 
+		
+		}	
 
-        }
-
-        if (toolbarInt == 0)
-        {
-
+		if (toolbarInt == 0) {
 
 
-            drawColor = EditorGUILayout.ColorField("Draw color", drawColor);
-            opacity = EditorGUILayout.FloatField("Opacity", opacity);
-            drawSize = EditorGUILayout.FloatField("Size", drawSize);
-            if (drawSize < 0)
-            {
-                drawSize = 0;
-            }
 
-            drawColorR = EditorGUILayout.Toggle("Draw R", drawColorR);
-            drawColorG = EditorGUILayout.Toggle("Draw G", drawColorG);
-            drawColorB = EditorGUILayout.Toggle("Draw B", drawColorB);
-            drawColorA = EditorGUILayout.Toggle("Draw A", drawColorA);
-
-            EditorGUILayout.HelpBox("R - Emission G- Bottom Cover B - Top Cover\n" +
+			drawColor = EditorGUILayout.ColorField ("Draw color", drawColor);
+			opacity = EditorGUILayout.FloatField ("Opacity", opacity);
+			drawSize = EditorGUILayout.FloatField ("Size", drawSize);
+			if (drawSize < 0) {
+				drawSize = 0;
+			}
+			EditorGUILayout.HelpBox ("R - Emission G- Bottom Cover B - Top Cover\n" +
                 "Paint  - Left Mouse Button Click \n" +
                 "Clean  - SHIFT + Left Mouse Button Click \n", MessageType.Info);
-            EditorGUILayout.Space();
-        }
-        else
-        {
-            flowSpeed = EditorGUILayout.Slider("Flow U Speed", flowSpeed, -1, 1);
-            flowDirection = EditorGUILayout.Slider("Flow V Speed", flowDirection, -1, 1);
-            opacity = EditorGUILayout.FloatField("Opacity", opacity);
-            drawSize = EditorGUILayout.FloatField("Size", drawSize);
-            if (drawSize < 0)
-            {
-                drawSize = 0;
-            }
-        }
+			EditorGUILayout.Space ();
+		} else {
+			flowSpeed = EditorGUILayout.Slider ("Flow U Speed", flowSpeed, -1, 1);
+			flowDirection = EditorGUILayout.Slider ("Flow V Speed", flowDirection, -1, 1);
+			opacity = EditorGUILayout.FloatField ("Opacity", opacity);
+			drawSize = EditorGUILayout.FloatField ("Size", drawSize);
+			if (drawSize < 0) {
+				drawSize = 0;
+			}
+		}
 
 
 
 
+	
+	}
 
-    }
+	void ResetMaterial ()
+	{
 
-    void ResetMaterial()
-    {
+		showFlowMap = false;
+		showVertexColors = false;
+	}
 
-        showFlowMap = false;
-        showVertexColors = false;
-    }
+	void StopDrawing ()
+	{
+		
+		if (showVertexColors) {
+			for (int i = 0; i < meshFilters.Count; i++) {
+				meshFilters [i].GetComponent<MeshRenderer> ().sharedMaterial = oldMaterials [i];
+			}
+			showVertexColors = false;
+		}
+        
+		if (showFlowMap) {
+            for (int i = 0; i < meshFilters.Count; i++) {
+                
+                meshFilters [i].GetComponent<MeshRenderer> ().sharedMaterial = oldMaterials [i];
+			}
+			showFlowMap = false;
+		}
+		currentDrawObject = null;
 
-    void StopDrawing()
-    {
-
-        if (showVertexColors)
-        {
-            for (int i = 0; i < meshFilters.Count; i++)
-            {
-                meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial = oldMaterials[i];
-            }
-            showVertexColors = false;
-        }
-
-        if (showFlowMap)
-        {
-            for (int i = 0; i < meshFilters.Count; i++)
-            {
-
-                meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial = oldMaterials[i];
-            }
-            showFlowMap = false;
-        }
-        currentDrawObject = null;
-
-        drawing = false;
+		drawing = false;
         meshFilters.Clear();
 
     }
 
-    protected virtual void OnSceneGUI(SceneView sceneView)
-    {
+	protected virtual void OnSceneGUI (SceneView sceneView)
+	{
+		
+		if (Selection.activeGameObject != currentDrawObject && drawing) {
+			StopDrawing ();
+		}
+		
+		Color baseColor = Handles.color;
+
+
+		if (currentDrawObject != null) {
+
 
-        if (Selection.activeGameObject != currentDrawObject && drawing)
-        {
-            StopDrawing();
-        }
-
-        Color baseColor = Handles.color;
-
-
-        if (currentDrawObject != null)
-        {
-
-
-            if (drawing)
-            {
-                if (toolbarInt == 0)
-                    DrawOnVertexColors();
-                else
-                    DrawOnFlowMap();
-            }
-        }
-    }
+			if (drawing) {
+				if (toolbarInt == 0)
+					DrawOnVertexColors ();
+				else
+					DrawOnFlowMap ();
+			}
+		}
+	}
 
-    void RestartColor()
-    {
-        foreach (var item in meshFilters)
-        {
-            Mesh mesh = item.sharedMesh;
-            if (!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(mesh)))
-            {
-                mesh = Instantiate<Mesh>(item.sharedMesh);
-                item.sharedMesh = mesh;
+	void RestartColor ()
+	{
+		foreach (var item in meshFilters) {
+			Mesh mesh = item.sharedMesh; 
+			if (!string.IsNullOrEmpty (AssetDatabase.GetAssetPath (mesh))) {
+				mesh = Instantiate<Mesh> (item.sharedMesh);
+				item.sharedMesh = mesh;
+
+			}
+
+			mesh.colors = null;
+
+		}
+	}
 
-            }
+	void RestartFlow ()
+	{
+		foreach (var item in meshFilters) {
+			Mesh mesh = item.sharedMesh; 
+			if (!string.IsNullOrEmpty (AssetDatabase.GetAssetPath (mesh))) {
+				mesh = Instantiate<Mesh> (item.sharedMesh);
+				item.sharedMesh = mesh;
 
-            mesh.colors = null;
+			}
 
-        }
-    }
+			mesh.uv4 = null;
 
-    void RestartFlow()
-    {
-        foreach (var item in meshFilters)
-        {
-            Mesh mesh = item.sharedMesh;
-            if (!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(mesh)))
-            {
-                mesh = Instantiate<Mesh>(item.sharedMesh);
-                item.sharedMesh = mesh;
+		}
+	}
 
-            }
+	void DrawOnVertexColors ()
+	{
 
-            mesh.uv4 = null;
+		HandleUtility.AddDefaultControl (GUIUtility.GetControlID (FocusType.Passive));
 
-        }
-    }
 
-    void DrawOnVertexColors()
-    {
 
-        HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+		Camera sceneCamera = SceneView.lastActiveSceneView.camera;
+		Vector2 mousePos = Event.current.mousePosition;
+		mousePos.y = Screen.height - mousePos.y - 40;
+		Ray ray = sceneCamera.ScreenPointToRay (mousePos);
 
+		List<MeshCollider> meshColliders = new List<MeshCollider> ();
+		foreach (var item in meshFilters) {
+			meshColliders.Add (item.gameObject.AddComponent<MeshCollider> ());
+		}
 
+		RaycastHit[] hits = Physics.RaycastAll (ray, Mathf.Infinity);
 
-        Camera sceneCamera = SceneView.lastActiveSceneView.camera;
-        //Vector2 mousePos = Event.current.mousePosition;
-        //mousePos.y = Screen.height - mousePos.y - 40;
-        //Ray ray = sceneCamera.ScreenPointToRay(mousePos);
-        Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+		Vector3 hitPosition = Vector3.zero;
+		Vector3 hitNormal = Vector3.zero;
+		if (hits.Length > 0) {
 
-        List<MeshCollider> meshColliders = new List<MeshCollider>();
-        foreach (var item in meshFilters)
-        {
-            meshColliders.Add(item.gameObject.AddComponent<MeshCollider>());
-        }
+			foreach (var hit in hits) {
+				
+				if (hit.collider is MeshCollider) {
+					MeshFilter meshFilter = hit.collider.GetComponent<MeshFilter> ();
 
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+					hitPosition = hit.point;
+					hitNormal = hit.normal;
 
-        Vector3 hitPosition = Vector3.zero;
-        Vector3 hitNormal = Vector3.zero;
-        if (hits.Length > 0)
-        {
+					Handles.color = new Color (drawColor.r, drawColor.g, drawColor.b, 1);
+					Handles.DrawLine (hitPosition, hitPosition + hitNormal * 2);
+					Handles.CircleHandleCap (
+						GUIUtility.GetControlID (FocusType.Passive),
+						hitPosition,
+						Quaternion.LookRotation (hitNormal),
+						drawSize,
+						EventType.Repaint
+					);
+					Handles.color = Color.black;
+					Handles.CircleHandleCap (
+						GUIUtility.GetControlID (FocusType.Passive),
+						hitPosition,
+						Quaternion.LookRotation (hitNormal),
+						drawSize * 0.95f,
+						EventType.Repaint
+					);
 
-            foreach (var hit in hits)
-            {
+					foreach (var currentMeshFilter in meshFilters) {
+											
+						if (meshFilter == currentMeshFilter) {
+							
 
-                if (hit.collider is MeshCollider)
-                {
-                    MeshFilter meshFilter = hit.collider.GetComponent<MeshFilter>();
+						
 
-                    hitPosition = hit.point;
-                    hitNormal = hit.normal;
+							if (!(Event.current.type == EventType.MouseDown || Event.current.type == EventType.MouseDrag) || Event.current.button != 0)
+								continue;
 
-                    Handles.color = new Color(drawColor.r, drawColor.g, drawColor.b, 1);
-                    Handles.DrawLine(hitPosition, hitPosition + hitNormal * 2);
-                    Handles.CircleHandleCap(
-                        GUIUtility.GetControlID(FocusType.Passive),
-                        hitPosition,
-                        Quaternion.LookRotation(hitNormal),
-                        drawSize,
-                        EventType.Repaint
-                    );
-                    Handles.color = Color.black;
-                    Handles.CircleHandleCap(
-                        GUIUtility.GetControlID(FocusType.Passive),
-                        hitPosition,
-                        Quaternion.LookRotation(hitNormal),
-                        drawSize * 0.95f,
-                        EventType.Repaint
-                    );
 
-                    foreach (var currentMeshFilter in meshFilters)
-                    {
+							if (meshFilter.sharedMesh != null) {
+								
 
-                        if (meshFilter == currentMeshFilter)
-                        {
 
+								Mesh mesh = meshFilter.sharedMesh; 
+								if (!string.IsNullOrEmpty (AssetDatabase.GetAssetPath (mesh))) {
+									mesh = Instantiate<Mesh> (meshFilter.sharedMesh);
+									meshFilter.sharedMesh = mesh;
 
+								}
 
+								int vertLength = mesh.vertices.Length;
+								Vector3[] vertices = mesh.vertices;
+								Color[] colors = mesh.colors;
+								Transform transform = meshFilter.transform;
+								if (colors.Length == 0) {
+									colors = new Color[vertLength];
+									for (int i = 0; i < colors.Length; i++) {
+										colors [i] = Color.white;
+									}
 
-                            if (!(Event.current.type == EventType.MouseDown || Event.current.type == EventType.MouseDrag) || Event.current.button != 0)
-                                continue;
+								}
 
 
-                            if (meshFilter.sharedMesh != null)
-                            {
 
+								for (int i = 0; i < vertLength; i++) {
+									
+									float dist = Vector3.Distance (hitPosition, transform.TransformPoint (vertices [i]));
 
+									if (dist < drawSize) {
+										
+										if (Event.current.shift)
+											colors [i] = Color.Lerp (colors [i], Color.white, opacity);
+										else
+											colors [i] = Color.Lerp (colors [i], drawColor, opacity);					
 
-                                Mesh mesh = meshFilter.sharedMesh;
-                                if (!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(mesh)))
-                                {
-                                    mesh = Instantiate<Mesh>(meshFilter.sharedMesh);
-                                    meshFilter.sharedMesh = mesh;
+									}
+								}
 
-                                }
 
-                                int vertLength = mesh.vertices.Length;
-                                Vector3[] vertices = mesh.vertices;
-                                Color[] colors = mesh.colors;
-                                Transform transform = meshFilter.transform;
-                                if (colors.Length == 0)
-                                {
-                                    colors = new Color[vertLength];
-                                    for (int i = 0; i < colors.Length; i++)
-                                    {
-                                        colors[i] = Color.white;
-                                    }
+								mesh.colors = colors;
 
-                                }
+							}
+						} 
+					}
+				}
+			}
+		}
 
+		foreach (var item in meshColliders) {
+			DestroyImmediate (item);
+		}
 
+	}
 
-                                for (int i = 0; i < vertLength; i++)
-                                {
+	void DrawOnFlowMap ()
+	{
 
-                                    float dist = Vector3.Distance(hitPosition, transform.TransformPoint(vertices[i]));
+	
+		HandleUtility.AddDefaultControl (GUIUtility.GetControlID (FocusType.Passive));
 
-                                    if (dist < drawSize)
-                                    {
 
-                                        if (Event.current.shift)
-                                            colors[i] = Color.Lerp(colors[i], Color.white, opacity);
-                                        else
-                                            colors[i] = Color.Lerp(colors[i], drawColor, opacity);
 
+		Camera sceneCamera = SceneView.lastActiveSceneView.camera;
+		Vector2 mousePos = Event.current.mousePosition;
+		mousePos.y = Screen.height - mousePos.y - 40;
+		Ray ray = sceneCamera.ScreenPointToRay (mousePos);
 
-                                        if (Event.current.shift)
-                                        {
-                                            if (drawColorR)
-                                                colors[i].r = Mathf.Lerp(colors[i].r, 1, opacity);
-                                            if (drawColorG)
-                                                colors[i].g = Mathf.Lerp(colors[i].g, 1, opacity);
-                                            if (drawColorB)
-                                                colors[i].b = Mathf.Lerp(colors[i].b, 1, opacity);
-                                            if (drawColorA)
-                                                colors[i].a = Mathf.Lerp(colors[i].a, 1, opacity);
-                                        }
-                                        else
-                                        {
-                                            if (drawColorR)
-                                                colors[i].r = Mathf.Lerp(colors[i].r, drawColor.r, opacity);
-                                            if (drawColorG)
-                                                colors[i].g = Mathf.Lerp(colors[i].g, drawColor.g, opacity);
-                                            if (drawColorB)
-                                                colors[i].b = Mathf.Lerp(colors[i].b, drawColor.b, opacity);
-                                            if (drawColorA)
-                                                colors[i].a = Mathf.Lerp(colors[i].a, drawColor.a, opacity);
-                                        }
+		List<MeshCollider> meshColliders = new List<MeshCollider> ();
+		foreach (var item in meshFilters) {
+			meshColliders.Add (item.gameObject.AddComponent<MeshCollider> ());
+		}
 
-                                    }
-                                }
+		RaycastHit[] hits = Physics.RaycastAll (ray, Mathf.Infinity);
 
+		Vector3 hitPosition = Vector3.zero;
+		Vector3 hitNormal = Vector3.zero;
 
-                                mesh.colors = colors;
 
-                            }
-                        }
-                    }
-                }
-            }
-        }
+		if (hits.Length > 0) {
 
-        foreach (var item in meshColliders)
-        {
-            DestroyImmediate(item);
-        }
+			foreach (var hit in hits) {
 
-    }
+				if (hit.collider is MeshCollider) {
+					MeshFilter meshFilter = hit.collider.GetComponent<MeshFilter> ();
 
-    void DrawOnFlowMap()
-    {
+					hitPosition = hit.point;
+					hitNormal = hit.normal;
 
+					Handles.color = new Color (drawColor.r, drawColor.g, drawColor.b, 1);
+					Handles.DrawLine (hitPosition, hitPosition + hitNormal * 2);
+					Handles.CircleHandleCap (
+						GUIUtility.GetControlID (FocusType.Passive),
+						hitPosition,
+						Quaternion.LookRotation (hitNormal),
+						drawSize,
+						EventType.Repaint
+					);
+					Handles.color = Color.black;
+					Handles.CircleHandleCap (
+						GUIUtility.GetControlID (FocusType.Passive),
+						hitPosition,
+						Quaternion.LookRotation (hitNormal),
+						drawSize * 0.95f,
+						EventType.Repaint
+					);
 
-        HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+					foreach (var currentMeshFilter in meshFilters) {
 
+						if (meshFilter == currentMeshFilter) {
 
 
-        Camera sceneCamera = SceneView.lastActiveSceneView.camera;
-        //Vector2 mousePos = Event.current.mousePosition;
-        //mousePos.y = Screen.height - mousePos.y - 40;
-        //Ray ray = sceneCamera.ScreenPointToRay(mousePos);
+							if (!(Event.current.type == EventType.MouseDown || Event.current.type == EventType.MouseDrag) || Event.current.button != 0)
+								continue;
 
-        Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
 
-        List<MeshCollider> meshColliders = new List<MeshCollider>();
-        foreach (var item in meshFilters)
-        {
-            meshColliders.Add(item.gameObject.AddComponent<MeshCollider>());
-        }
 
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+						
+							if (meshFilter.sharedMesh != null) {
 
-        Vector3 hitPosition = Vector3.zero;
-        Vector3 hitNormal = Vector3.zero;
 
 
-        if (hits.Length > 0)
-        {
+								Mesh mesh = meshFilter.sharedMesh; 
+								if (!string.IsNullOrEmpty (AssetDatabase.GetAssetPath (mesh))) {
+									mesh = Instantiate<Mesh> (meshFilter.sharedMesh);
+									meshFilter.sharedMesh = mesh;
 
-            foreach (var hit in hits)
-            {
+								}
 
-                if (hit.collider is MeshCollider)
-                {
-                    MeshFilter meshFilter = hit.collider.GetComponent<MeshFilter>();
+								int vertLength = mesh.vertices.Length;
+								Vector3[] vertices = mesh.vertices;
+								Vector2[] colorsFlowMap = mesh.uv4;
 
-                    hitPosition = hit.point;
-                    hitNormal = hit.normal;
+								Transform transform = meshFilter.transform;
+								if (colorsFlowMap.Length == 0) {
+									colorsFlowMap = new Vector2[vertLength];
+									for (int i = 0; i < colorsFlowMap.Length; i++) {
+										colorsFlowMap [i] = new Vector2 (0, 0);
+									}
 
-                    Handles.color = new Color(drawColor.r, drawColor.g, drawColor.b, 1);
-                    Handles.DrawLine(hitPosition, hitPosition + hitNormal * 2);
-                    Handles.CircleHandleCap(
-                        GUIUtility.GetControlID(FocusType.Passive),
-                        hitPosition,
-                        Quaternion.LookRotation(hitNormal),
-                        drawSize,
-                        EventType.Repaint
-                    );
-                    Handles.color = Color.black;
-                    Handles.CircleHandleCap(
-                        GUIUtility.GetControlID(FocusType.Passive),
-                        hitPosition,
-                        Quaternion.LookRotation(hitNormal),
-                        drawSize * 0.95f,
-                        EventType.Repaint
-                    );
+								}
 
-                    foreach (var currentMeshFilter in meshFilters)
-                    {
 
-                        if (meshFilter == currentMeshFilter)
-                        {
+								float dist = 0;
+								float distValue = 0;
+								for (int i = 0; i < vertLength; i++) {
 
+									dist = Vector3.Distance (hitPosition, transform.TransformPoint (vertices [i]));
 
-                            if (!(Event.current.type == EventType.MouseDown || Event.current.type == EventType.MouseDrag) || Event.current.button != 0)
-                                continue;
 
+									if (dist < drawSize) {
+										distValue = (drawSize - dist) / (float)drawSize;
+										if (Event.current.shift) {
+											colorsFlowMap [i] = Vector2.Lerp (colorsFlowMap [i], new Vector2 (0, 0), opacity);
 
+										} else {
+											colorsFlowMap [i] = Vector2.Lerp (colorsFlowMap [i], new Vector2 (flowDirection, flowSpeed), opacity * distValue);
 
+										}
 
-                            if (meshFilter.sharedMesh != null)
-                            {
+									}
+								}
 
 
+								mesh.uv4 = colorsFlowMap;
 
-                                Mesh mesh = meshFilter.sharedMesh;
-                                if (!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(mesh)))
-                                {
-                                    mesh = Instantiate<Mesh>(meshFilter.sharedMesh);
-                                    meshFilter.sharedMesh = mesh;
+							}
+						}
+					}
+				}
+			}
+		}
 
-                                }
+		foreach (var item in meshColliders) {
+			DestroyImmediate (item);
+		}
+	}
 
-                                int vertLength = mesh.vertices.Length;
-                                Vector3[] vertices = mesh.vertices;
-                                Vector2[] colorsFlowMap = mesh.uv4;
+	void OnFocus ()
+	{
+		
+		SceneView.onSceneGUIDelegate -= this.OnSceneGUI;
+		SceneView.onSceneGUIDelegate += this.OnSceneGUI;
+	}
 
-                                Transform transform = meshFilter.transform;
-                                if (colorsFlowMap.Length == 0)
-                                {
-                                    colorsFlowMap = new Vector2[vertLength];
-                                    for (int i = 0; i < colorsFlowMap.Length; i++)
-                                    {
-                                        colorsFlowMap[i] = new Vector2(0, 0);
-                                    }
-
-                                }
-
-
-                                float dist = 0;
-                                float distValue = 0;
-                                for (int i = 0; i < vertLength; i++)
-                                {
-
-                                    dist = Vector3.Distance(hitPosition, transform.TransformPoint(vertices[i]));
-
-
-                                    if (dist < drawSize)
-                                    {
-                                        distValue = (drawSize - dist) / (float)drawSize;
-                                        if (Event.current.shift)
-                                        {
-                                            colorsFlowMap[i] = Vector2.Lerp(colorsFlowMap[i], new Vector2(0, 0), opacity);
-
-                                        }
-                                        else
-                                        {
-                                            colorsFlowMap[i] = Vector2.Lerp(colorsFlowMap[i], new Vector2(flowDirection, flowSpeed), opacity * distValue);
-
-                                        }
-
-                                    }
-                                }
-
-
-                                mesh.uv4 = colorsFlowMap;
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        foreach (var item in meshColliders)
-        {
-            DestroyImmediate(item);
-        }
-    }
-
-    void OnFocus()
-    {
-
-#if UNITY_2019_1_OR_NEWER
-        SceneView.duringSceneGui -= this.OnSceneGUI;
-        SceneView.duringSceneGui += this.OnSceneGUI;
-#else
-        SceneView.onSceneGUIDelegate -= this.OnSceneGUI;
-        SceneView.onSceneGUIDelegate += this.OnSceneGUI;
-#endif
-
-
-    }
-
-    void OnDestroy()
-    {
-
-#if UNITY_2019_1_OR_NEWER
-        SceneView.duringSceneGui -= this.OnSceneGUI;
-#else
-        SceneView.onSceneGUIDelegate -= this.OnSceneGUI;
-#endif
-
-        if (drawing)
-            StopDrawing();
-
-    }
+	void OnDestroy ()
+	{
+		
+		SceneView.onSceneGUIDelegate -= this.OnSceneGUI;
+		if (drawing)
+			StopDrawing ();
+		
+	}
 }
