@@ -4,8 +4,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEditor.Rendering;
 using UnityEngine.Rendering;
-using UnityStandardAssets.Characters.FirstPerson;
-using UnityStandardAssets.Characters.ThirdPerson;
 using System;
 using System.Collections.Generic;
 using Gaia.Pipeline.HDRP;
@@ -15,6 +13,10 @@ using System.Linq;
 using UnityEngine.Rendering.HighDefinition;
 #endif
 
+#if UNITY_STANDARD_ASSETS_PRESENT
+using UnityStandardAssets.Characters.FirstPerson;
+using UnityStandardAssets.Characters.ThirdPerson;
+#endif
 namespace Gaia
 {
     /// <summary>
@@ -1151,39 +1153,36 @@ namespace Gaia
             }
 
 #if GAIA_PRO_PRESENT
-            //Add the simple terrain culling script, useful in any case
+            //Add the simple terrain culling script...
             if (GaiaUtils.CheckIfSceneProfileExists())
             {
                 GaiaGlobal.Instance.SceneProfile.m_terrainCullingEnabled = true;
             }
-            //Add the "Wait for terrain loading" script, otherwise character might fall through the terrain
             if (dynamicLoadedTerrains)
             {
                 RigidbodyWaitForTerrainLoad waitForLoad = playerObj.GetComponent<RigidbodyWaitForTerrainLoad>();
-                if (waitForLoad == null)
-                {
-                    waitForLoad = playerObj.AddComponent<RigidbodyWaitForTerrainLoad>();
-                }
-                ThirdPersonCharacter tpc = playerObj.GetComponent<ThirdPersonCharacter>();
-                if (tpc != null)
-                {
-                    tpc.enabled = false;
-                    if (!waitForLoad.m_componentsToActivate.Contains(tpc))
-                    {
-                        waitForLoad.m_componentsToActivate.Add(tpc);
-                    }
-                }
-                ThirdPersonUserControl tpuc = playerObj.GetComponent<ThirdPersonUserControl>();
-                if (tpuc != null)
-                {
-                    tpuc.enabled = false;
-                    if (!waitForLoad.m_componentsToActivate.Contains(tpuc))
-                    {
-                        waitForLoad.m_componentsToActivate.Add(tpuc);
-                    }
-                }
+                if (waitForLoad == null) waitForLoad = playerObj.AddComponent<RigidbodyWaitForTerrainLoad>();
+
+#if UNITY_STANDARD_ASSETS_PRESENT
+    ThirdPersonCharacter tpc = playerObj.GetComponent<ThirdPersonCharacter>();
+    if (tpc != null)
+    {
+        tpc.enabled = false;
+        if (!waitForLoad.m_componentsToActivate.Contains(tpc))
+            waitForLoad.m_componentsToActivate.Add(tpc);
+    }
+
+    ThirdPersonUserControl tpuc = playerObj.GetComponent<ThirdPersonUserControl>();
+    if (tpuc != null)
+    {
+        tpuc.enabled = false;
+        if (!waitForLoad.m_componentsToActivate.Contains(tpuc))
+            waitForLoad.m_componentsToActivate.Add(tpuc);
+    }
+#endif // UNITY_STANDARD_ASSETS_PRESENT
             }
-#endif
+#endif // GAIA_PRO_PRESENT
+
 
 #if !UNITY_2017_1_OR_NEWER
             mainCam.AddComponent<GUILayer>();
@@ -1265,39 +1264,35 @@ namespace Gaia
                 characterController.height = 0.5f;
             }
 #if GAIA_PRO_PRESENT
-            //Add the simple terrain culling script, useful in any case
             if (GaiaUtils.CheckIfSceneProfileExists())
             {
                 GaiaGlobal.Instance.SceneProfile.m_terrainCullingEnabled = true;
             }
-            //Add the "Wait for terrain loading" script, otherwise character might fall through the terrain
             if (dynamicLoadedTerrains)
             {
                 RigidbodyWaitForTerrainLoad waitForLoad = playerObj.GetComponent<RigidbodyWaitForTerrainLoad>();
-                if (waitForLoad == null)
-                {
-                    waitForLoad = playerObj.AddComponent<RigidbodyWaitForTerrainLoad>();
-                }
-                ThirdPersonCharacter tpc = playerObj.GetComponent<ThirdPersonCharacter>();
-                if (tpc != null)
-                {
-                    tpc.enabled = false;
-                    if (!waitForLoad.m_componentsToActivate.Contains(tpc))
-                    {
-                        waitForLoad.m_componentsToActivate.Add(tpc);
-                    }
-                }
-                ThirdPersonUserControl tpuc = playerObj.GetComponent<ThirdPersonUserControl>();
-                if (tpuc != null)
-                {
-                    tpuc.enabled = false;
-                    if (!waitForLoad.m_componentsToActivate.Contains(tpuc))
-                    {
-                        waitForLoad.m_componentsToActivate.Add(tpuc);
-                    }
-                }
+                if (waitForLoad == null) waitForLoad = playerObj.AddComponent<RigidbodyWaitForTerrainLoad>();
+
+#if UNITY_STANDARD_ASSETS_PRESENT
+    ThirdPersonCharacter tpc = playerObj.GetComponent<ThirdPersonCharacter>();
+    if (tpc != null)
+    {
+        tpc.enabled = false;
+        if (!waitForLoad.m_componentsToActivate.Contains(tpc))
+            waitForLoad.m_componentsToActivate.Add(tpc);
+    }
+
+    ThirdPersonUserControl tpuc = playerObj.GetComponent<ThirdPersonUserControl>();
+    if (tpuc != null)
+    {
+        tpuc.enabled = false;
+        if (!waitForLoad.m_componentsToActivate.Contains(tpuc))
+            waitForLoad.m_componentsToActivate.Add(tpuc);
+    }
+#endif // UNITY_STANDARD_ASSETS_PRESENT
             }
-#endif
+#endif // GAIA_PRO_PRESENT
+
 
             GaiaGlobal.FinalizePlayerObjectEditor(playerObj, gaiaSettings);
             GaiaGlobal.FinalizeCameraObjectRuntime(cameraComponent);
@@ -1484,31 +1479,25 @@ namespace Gaia
         }
         private static void SetupPlayer(GameObject playerObject, bool dynamicLoadedTerrains)
         {
-            if (playerObject == null)
-            {
-                return;
-            }
+            if (playerObject == null) return;
 
             if (dynamicLoadedTerrains)
             {
 #if GAIA_PRO_PRESENT
                 RigidbodyWaitForTerrainLoad waitForLoad = playerObject.GetComponent<RigidbodyWaitForTerrainLoad>();
-                if (waitForLoad == null)
-                {
-                    waitForLoad = playerObject.AddComponent<RigidbodyWaitForTerrainLoad>();
-                }
+                if (waitForLoad == null) waitForLoad = playerObject.AddComponent<RigidbodyWaitForTerrainLoad>();
 
-                //Add the "Wait for terrain loading" script, otherwise character might fall through the terrain
-                FirstPersonController fpsc = playerObject.GetComponent<FirstPersonController>();
-                if (fpsc != null)
-                {
-                    fpsc.enabled = false;
-                    if (!waitForLoad.m_componentsToActivate.Contains(fpsc))
-                    {
-                        waitForLoad.m_componentsToActivate.Add(fpsc);
-                    }
-                }
-#endif
+#if UNITY_STANDARD_ASSETS_PRESENT
+        // Add FP controller to activation list only if the class exists
+        FirstPersonController fpsc = playerObject.GetComponent<FirstPersonController>();
+        if (fpsc != null)
+        {
+            fpsc.enabled = false;
+            if (!waitForLoad.m_componentsToActivate.Contains(fpsc))
+                waitForLoad.m_componentsToActivate.Add(fpsc);
+        }
+#endif // UNITY_STANDARD_ASSETS_PRESENT
+#endif // GAIA_PRO_PRESENT
             }
         }
         private static void SetupCamera(Camera cameraObject)

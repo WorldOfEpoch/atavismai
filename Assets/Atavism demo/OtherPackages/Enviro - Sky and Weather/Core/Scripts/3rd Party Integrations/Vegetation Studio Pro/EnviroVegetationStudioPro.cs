@@ -1,16 +1,11 @@
-﻿// Vegetation Studio Pro Integration (reflection-safe)
-// Replaces direct calls to SelectedWindZone and EnvironmentSettings.* with reflection.
-// This avoids CS1061 when those members are missing/renamed in your VSP build.
-
-using System;
+﻿// Vegetation Studio Pro Integration (version-tolerant)
 using System.Reflection;
 using UnityEngine;
-
 #if VEGETATION_STUDIO_PRO
-using AwesomeTechnologies.VegetationStudio; // Keep the original namespace; only members are accessed via reflection.
+using AwesomeTechnologies.VegetationStudio;
 #endif
 
-[AddComponentMenu("Enviro/Integration/VS Pro Integration (Safe)")]
+[AddComponentMenu("Enviro/Integration/VS Pro Integration")]
 public class EnviroVegetationStudioPro : MonoBehaviour
 {
 #if VEGETATION_STUDIO_PRO
@@ -20,128 +15,104 @@ public class EnviroVegetationStudioPro : MonoBehaviour
 
     void Start()
     {
-        if (VegetationStudioManager.Instance == null || EnviroSkyMgr.instance == null)
-            return;
+        if (VegetationStudioManager.Instance == null || EnviroSkyMgr.instance == null) return;
 
         if (!setWindZone) return;
 
-        var vsList = VegetationStudioManager.Instance.VegetationSystemList;
-        if (vsList == null) return;
-
-        // Try to set SelectedWindZone if that property exists in this VSP build
-        var windZone = EnviroSkyMgr.instance.Components != null
-            ? EnviroSkyMgr.instance.Components.windZone
-            : null;
-
-        if (windZone == null) return;
-
-        for (int i = 0; i < vsList.Count; i++)
+        var wind = EnviroSkyMgr.instance.Components.windZone;
+        var systems = VegetationStudioManager.Instance.VegetationSystemList;
+        for (int i = 0; i < systems.Count; i++)
         {
-            var vs = vsList[i];
-            TrySetProperty(vs, "SelectedWindZone", windZone);
+            var sys = systems[i];
+            // Try: sys.SelectedWindZone = wind;
+            TrySetProperty(sys, "SelectedWindZone", wind);
+
+            // Some VSP versions expose a helper on the manager:
+            // VegetationStudioManager.SetWindZone(windZone) – try it reflectively as well.
+            TryCall(VegetationStudioManager.Instance, "SetWindZone", new object[] { wind });
         }
     }
 
     void Update()
     {
-        if (VegetationStudioManager.Instance == null || EnviroSkyMgr.instance == null)
-            return;
+        if (VegetationStudioManager.Instance == null || EnviroSkyMgr.instance == null) return;
 
-        var vsList = VegetationStudioManager.Instance.VegetationSystemList;
-        if (vsList == null || vsList.Count == 0) return;
+        float envRain = EnviroSkyMgr.instance.Weather.wetness;
+        float envSnow = EnviroSkyMgr.instance.Weather.snowStrength;
 
-        float targetWetness = EnviroSkyMgr.instance.Weather != null ? EnviroSkyMgr.instance.Weather.wetness : 0f;
-        float targetSnow = EnviroSkyMgr.instance.Weather != null ? EnviroSkyMgr.instance.Weather.snowStrength : 0f;
-
-        for (int i = 0; i < vsList.Count; i++)
+        var systems = VegetationStudioManager.Instance.VegetationSystemList;
+        for (int i = 0; i < systems.Count; i++)
         {
-            var vs = vsList[i];
+            var sys = systems[i];
 
-            // Get EnvironmentSettings object if present on this VegetationSystemPro
-            if (!TryGetProperty(vs, "EnvironmentSettings", out object envSettings) || envSettings == null)
-                continue;
+            // Try to reach sys.EnvironmentSettings
+            object envSettings = TryGetProperty(sys, "EnvironmentSettings");
+            bool needsRefresh = false;
 
-            bool changed = false;
-
-            if (syncRain)
+            if (envSettings != null)
             {
-                if (TryGetFloat(envSettings, "RainAmount", out float currentRain) && !Mathf.Approximately(currentRain, targetWetness))
+                if (syncRain)
                 {
-                    TrySetFloat(envSettings, "RainAmount", targetWetness);
-                    changed = true;
+                    float? currentRain = TryGetProperty(envSettings, "RainAmount") as float?;
+                    if (!currentRain.HasValue || !Mathf.Approximately(currentRain.Value, envRain))
+                    {
+                        TrySetProperty(envSettings, "RainAmount", envRain);
+                        needsRefresh = true;
+                    }
+                }
+
+                if (syncSnow)
+                {
+                    float? currentSnow = TryGetProperty(envSettings, "SnowAmount") as float?;
+                    if (!currentSnow.HasValue || !Mathf.Approximately(currentSnow.Value, envSnow))
+                    {
+                        TrySetProperty(envSettings, "SnowAmount", envSnow);
+                        needsRefresh = true;
+                    }
                 }
             }
 
-            if (syncSnow)
+            if (needsRefresh)
             {
-                if (TryGetFloat(envSettings, "SnowAmount", out float currentSnow) && !Mathf.Approximately(currentSnow, targetSnow))
-                {
-                    TrySetFloat(envSettings, "SnowAmount", targetSnow);
-                    changed = true;
-                }
-            }
-
-            // If we changed Rain/Snow, try to call RefreshMaterials() on the VegetationSystemPro
-            if (changed)
-            {
-                TryInvokeMethod(vs, "RefreshMaterials");
+                // sys.RefreshMaterials();
+                TryCall(sys, "RefreshMaterials", null);
             }
         }
     }
 
-    // -------- Reflection helpers --------
-    static bool TryGetProperty(object target, string propertyName, out object value)
+    // ---- Reflection helpers ----
+    static object TryGetProperty(object target, string name)
     {
-        value = null;
-        if (target == null) return false;
-        var prop = target.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        if (prop == null || !prop.CanRead) return false;
-        try { value = prop.GetValue(target, null); return true; } catch { return false; }
+        if (target == null) return null;
+        var pi = target.GetType().GetProperty(name, BindingFlags.Public | BindingFlags.Instance);
+        return pi != null && pi.CanRead ? pi.GetValue(target) : null;
     }
 
-    static bool TrySetProperty(object target, string propertyName, object val)
+    static bool TrySetProperty(object target, string name, object value)
     {
         if (target == null) return false;
-        var prop = target.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        if (prop == null || !prop.CanWrite) return false;
-        try { prop.SetValue(target, val, null); return true; } catch { return false; }
-    }
-
-    static bool TryGetFloat(object target, string propertyName, out float result)
-    {
-        result = 0f;
-        if (!TryGetProperty(target, propertyName, out object val) || val == null) return false;
-        try
+        var pi = target.GetType().GetProperty(name, BindingFlags.Public | BindingFlags.Instance);
+        if (pi != null && pi.CanWrite)
         {
-            if (val is float f) { result = f; return true; }
-            if (val is double d) { result = (float)d; return true; }
-            result = Convert.ToSingle(val);
+            // Handle float conversions, etc.
+            var destType = pi.PropertyType;
+            if (value != null && !destType.IsInstanceOfType(value))
+            {
+                try { value = System.Convert.ChangeType(value, destType); } catch { }
+            }
+            pi.SetValue(target, value);
             return true;
         }
-        catch { return false; }
+        return false;
     }
 
-    static bool TrySetFloat(object target, string propertyName, float val)
+    static bool TryCall(object target, string method, object[] args)
     {
         if (target == null) return false;
-        var prop = target.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        if (prop == null || !prop.CanWrite) return false;
-        try
-        {
-            if (prop.PropertyType == typeof(float)) prop.SetValue(target, val, null);
-            else if (prop.PropertyType == typeof(double)) prop.SetValue(target, (double)val, null);
-            else prop.SetValue(target, Convert.ChangeType(val, prop.PropertyType), null);
-            return true;
-        }
-        catch { return false; }
-    }
-
-    static bool TryInvokeMethod(object target, string methodName)
-    {
-        if (target == null) return false;
-        var mi = target.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, Type.EmptyTypes, null);
+        var mi = target.GetType().GetMethod(method, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
         if (mi == null) return false;
-        try { mi.Invoke(target, null); return true; } catch { return false; }
+        mi.Invoke(target, args);
+        return true;
     }
 #endif
 }

@@ -19,13 +19,15 @@ using Gaia.Pipeline.LWRP;
 using Gaia.Pipeline.HDRP;
 using Gaia.Pipeline.URP;
 using Gaia.Pipeline;
-using UnityStandardAssets.Characters.FirstPerson;
-using UnityStandardAssets.Characters.ThirdPerson;
 using UnityEngine.Scripting;
 #if UNITY_2018_3_OR_NEWER
 using UnityEngine.Networking;
 #endif
 
+#if UNITY_STANDARD_ASSETS_PRESENT
+using UnityStandardAssets.Characters.FirstPerson;
+using UnityStandardAssets.Characters.ThirdPerson;
+#endif
 namespace Gaia
 {
     /// <summary>

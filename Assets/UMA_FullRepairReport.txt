@@ -1,0 +1,12 @@
+=== UMA Full Repair Report (9/19/2025 7:21:50 AM) ===
+Render Pipeline: Built-in (SRP disabled)
+- Clearing UMA-related editor state (requesting reimport of UMA assets).
++ UMA Asset Index rebuilt.
+- Races: 16, WardrobeRecipes: 0, Converters: 15, Slots: 259, Overlays: 0, UMAMaterials: 29
+WARNING: Slots/Overlays missing. Heads can render invisible or generic.
+- No Atavism UMA avatar component detected in open scenes (that’s fine).
+- UMAMaterials checked: 0. Upgraded: 0.
+- UMA refresh menu not found; consider manually rebuilding DCS recipes.
+- Atavism UMA rebuild hook not found; continuing.
++ Spawned UMA DCS prefab: Assets/UMA/Getting Started/Deprecated/UMA_DCS.prefab
++ Test Scene saved at Assets/Temp_UMA_TestScene.unity. Use it to validate head visuals without Atavism.
