@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Atavism;
 
 public class SFB_AudioManager : MonoBehaviour {
 
@@ -97,7 +96,7 @@ public class SFB_AudioManager : MonoBehaviour {
 	}
 
 	// Will play an audioClip once
-	void PlayAudio(string name){
+	public void PlayAudio(string name){
 		int index = AudioClipIndex (name);																		// Get the index of the named group
 		if (Random.Range (0, 100) >= (100 - audioClips [index].chanceOfPlaying)) {								// Only if a random chance is positive
 			float volume = audioClips [index].volume;															// grab the volume
@@ -107,19 +106,8 @@ public class SFB_AudioManager : MonoBehaviour {
 				// Clamp the volume
 				volume = Mathf.Clamp (volume * Mathf.Abs (animator.GetFloat ("locomotion")), audioClips [index].minVolume, audioClips [index].volume);
 			}
-            GameObject goTemp = new GameObject("Audio");
-            goTemp.transform.position = transform.position;
-            AudioSource audios = goTemp.AddComponent<AudioSource>();
-            audios.outputAudioMixerGroup = AtavismSettings.Instance.masterMixer.FindMatchingGroups("SFX")[0];
-            audios.clip = audioClip;
-            audios.spatialBlend = 1f;
-            audios.maxDistance = 30f;
-            audios.rolloffMode = AudioRolloffMode.Linear;
-            audios.volume = audioClips[index].volume;
-            audios.Play();
-            Destroy(goTemp, audios.clip.length); // destroy object after clip duration
-            //            AudioSource.PlayClipAtPoint(audioClip, transform.position, volume);									// Play the clip at point
-        }
+			AudioSource.PlayClipAtPoint(audioClip, transform.position, volume);									// Play the clip at point
+		}
 	}
 
 	// Call this to start the loop by name
@@ -153,11 +141,10 @@ public class SFB_AudioManager : MonoBehaviour {
 	private int AudioClipIndex(string name){
 		for (int i = 0; i < audioClips.Count; i++){										// For each audioClips group
 			if (audioClips [i].name == name) {											// If the name matches
-//                Debug.LogError(gameObject.name);
 				return i;																// Return index
 			}
 		}
-		Debug.LogError ("Did not find an audioClips[] entry named \"" + name + "\" for " + gameObject.name + ".");	// Send error to console
+		Debug.LogError ("Did not find an audioClips[] entry named \"" + name + "\".");	// Send error to console
 		return 0;																		// return 0
 	}
 

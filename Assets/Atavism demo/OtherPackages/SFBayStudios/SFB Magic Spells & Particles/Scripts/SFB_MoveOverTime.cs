@@ -12,7 +12,6 @@ public class SFB_MoveOverTime : MonoBehaviour {
 	public float speed = 1.0f;			// Speed of movement
 	public float delay = 0.0f;			// Initial delay before movement starts
 	public bool isMoving = false;		// True if moving
-    public bool moveForward = false;     // if object should be moved forward from mob
 
 	// Use this for initialization
 	void Start () {
@@ -29,15 +28,8 @@ public class SFB_MoveOverTime : MonoBehaviour {
 			if (local) {
 				transform.localPosition += travelDirection * Time.deltaTime * speed;
 			} else {
-                if (!moveForward)
-                {
-                    transform.position += travelDirection * Time.deltaTime * speed;
-                }
-                else
-                {
-                    transform.Translate(Vector3.forward * Time.deltaTime * speed);
-                }
-            }
+				transform.position += travelDirection * Time.deltaTime * speed;
+			}
 		}
 	}
 }

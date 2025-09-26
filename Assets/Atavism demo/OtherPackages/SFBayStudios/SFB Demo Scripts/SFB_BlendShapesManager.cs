@@ -28,6 +28,7 @@ public class SFB_BlendShapesManager : MonoBehaviour {
 	public bool showData;
 	public bool showScripting;
 	public int selectedShape;
+	public float globalRangeModifier = 0.5f;
 
 	[Serializable]
 	public class SFB_InspectorObject {
@@ -105,12 +106,15 @@ public class SFB_BlendShapesManager : MonoBehaviour {
 	public void SFB_BS_SetRandom(SFB_BlendShape blendShape){
 		blendShape.sliderValue = Mathf.Round(UnityEngine.Random.Range(blendShape.minValue, blendShape.maxValue));
 		SetValue(inspectorObjects[blendShape.inspectorID].objectID, inspectorObjects[blendShape.inspectorID].shapeID, blendShape.id, blendShape.sliderValue);
-		if (blendShape.isPlus) {
+		if (blendShape.isPlus && GetMinusShapeObject(blendShape.name) != 999999) {
 			int minusShapeObject = GetMinusShapeObject (blendShape.name);
-			int minusShapeID = GetMinusShapeID (blendShape.name);
-			SFB_BlendShape minusShape = blendShapeObjects [minusShapeObject].blendShapes [minusShapeID];
-			minusShape.sliderValue = -blendShape.sliderValue;
-			SetValue (minusShapeObject, minusShapeID, minusShape.id, minusShape.sliderValue);
+            if (minusShapeObject != 999999)
+            { 
+                int minusShapeID = GetMinusShapeID (blendShape.name);
+                SFB_BlendShape minusShape = blendShapeObjects[minusShapeObject].blendShapes[minusShapeID];
+                minusShape.sliderValue = -blendShape.sliderValue;
+                SetValue(minusShapeObject, minusShapeID, minusShape.id, minusShape.sliderValue);
+            }
 		}
 	}
 
@@ -153,26 +157,30 @@ public class SFB_BlendShapesManager : MonoBehaviour {
 		int objectID = inspectorObjects [selectedShape].objectID;
 		int shapeID = inspectorObjects[selectedShape].shapeID;
 		SFB_BlendShape blendShapeData = blendShapeObjects [objectID].blendShapes [shapeID];
-		if (blendShapeData.isPlus) {
+		if (blendShapeData.isPlus && GetMinusShapeObject(blendShapeData.name) != 999999) {
 			int minusShapeObject = GetMinusShapeObject (blendShapeData.name);
-			int minusShapeID = GetMinusShapeID (blendShapeData.name);
-			SFB_BlendShape minusShapeData = blendShapeObjects [minusShapeObject].blendShapes [minusShapeID];
-			blendShapeData.sliderValue = newValue;
-			minusShapeData.sliderValue = -newValue;
-			SetValue (minusShapeObject, minusShapeID, minusShapeData.id, -newValue);
+            if (minusShapeObject != 999999)
+            {
+                int minusShapeID = GetMinusShapeID (blendShapeData.name);
+                SFB_BlendShape minusShapeData = blendShapeObjects[minusShapeObject].blendShapes[minusShapeID];
+                blendShapeData.sliderValue = newValue;
+                minusShapeData.sliderValue = -newValue;
+                SetValue(minusShapeObject, minusShapeID, minusShapeData.id, -newValue);
+            }
 		}
 		SetValue(inspectorObjects[selectedShape].objectID, inspectorObjects[selectedShape].shapeID, inspectorObjects[selectedShape].blendShapeID, newValue);
 	}
 
 	public void SetValue(int objectID, int shapeID, int blendShapeID, float value){
+        //Debug.Log("Sev Value " + objectID + ", " + shapeID + "," + blendShapeID + "," + value);
 		blendShapeObjects [objectID].blendShapes [blendShapeID].value = blendShapeObjects [objectID].blendShapes [blendShapeID].sliderValue;
 		if (blendShapeObjects [objectID].renderer) {
-			blendShapeObjects [objectID].renderer.SetBlendShapeWeight (blendShapeID, value);
+			blendShapeObjects [objectID].renderer.SetBlendShapeWeight (blendShapeID, value * globalRangeModifier);
 			if (blendShapeObjects [objectID].blendShapes [shapeID].blendMatches.Count > 0) {
 				for (int m = 0; m < blendShapeObjects[objectID].blendShapes[shapeID].blendMatches.Count; m++){
 					int matchObject = blendShapeObjects[objectID].blendShapes[shapeID].blendMatches[m].objectID;
 					int matchShape = blendShapeObjects[objectID].blendShapes[shapeID].blendMatches[m].shapeID;
-					blendShapeObjects [matchObject].renderer.SetBlendShapeWeight (matchShape, value);
+					blendShapeObjects [matchObject].renderer.SetBlendShapeWeight (matchShape, value * globalRangeModifier);
 				}
 			}
 		}
@@ -244,7 +252,7 @@ public class SFB_BlendShapesManager : MonoBehaviour {
 				}
 			}
 		}
-		Debug.Log ("Error!  Cound not get minus shape ID");
+		//Debug.Log ("Oops! Cound not get minus shape ID.  (Shape name may include \"Plus\", but we could not find a corresponding \"Minus\"");
 		return 999999;
 	}
 
@@ -257,8 +265,8 @@ public class SFB_BlendShapesManager : MonoBehaviour {
 				}
 			}
 		}
-		Debug.Log ("Error!  Cound not get minus shape object");
-		return 999999;
+        //Debug.Log("Oops! Cound not get minus shape object.  (Shape name may include \"Plus\", but we could not find a corresponding \"Minus\"");
+        return 999999;
 	}
 
 	public int VisibleBlendShapes(Mesh newMesh){
@@ -360,8 +368,16 @@ public class SFB_BlendShapesManager : MonoBehaviour {
 		blendShapeObjects.Clear ();
 		inspectorObjects.Clear ();
 		SkinnedMeshRenderer[] allChildren = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
-		foreach (SkinnedMeshRenderer child in allChildren) {
+		Debug.Log("allChildren Length: " + allChildren.Length);
+		int counter = 0;
+		foreach (SkinnedMeshRenderer child in allChildren)
+		{
+			Debug.Log(counter);
+			counter++;
+			Debug.Log("Child: " + child.name);
 			Mesh newMesh = child.sharedMesh;
+			Debug.Log("newMesh: " + newMesh.name);
+            Debug.Log("blendShapeCount: " + newMesh.blendShapeCount);
 			if (newMesh.blendShapeCount > 0) {
 				AddObject (newMesh, child);
 			}
@@ -430,23 +446,36 @@ public class SFB_BlendShapesManager : MonoBehaviour {
 	/// This is for editor use only.  To save players desired settings, best to use playerprefs or some other saving method.
 	/// </summary>
 	public void SFB_BS_ExportPreset(){
-		string savedData = "";
-		for (int i = 0; i < inspectorObjects.Count; i++){
-			if (i != 0) {
-				savedData = savedData + ",";
-			}
-			int presetExportValue = blendShapeObjects[inspectorObjects[i].objectID].blendShapes[inspectorObjects[i].blendShapeID].presetExportValue;
-			if (presetExportValue == 0)
-				savedData = savedData + "*";
-			else if (presetExportValue == 1)
-			{
-				var currentWeight	= blendShapeObjects[inspectorObjects[i].objectID].renderer.GetBlendShapeWeight(inspectorObjects[i].blendShapeID);
-				savedData = savedData + currentWeight;
-			}
-			else if (presetExportValue == 2)
-				savedData = savedData + "R";
+        string savedData = "SFB_BlendShapesManager V2";
+        for (int i = 0; i < inspectorObjects.Count; i++){
+            int presetExportValue = blendShapeObjects[inspectorObjects[i].objectID].blendShapes[inspectorObjects[i].blendShapeID].presetExportValue;
+            if (presetExportValue != 0)
+            {
+
+                if (savedData != "")
+                {
+                    savedData = savedData + ",";
+                }
+
+                savedData = savedData + blendShapeObjects[inspectorObjects[i].objectID].name;
+                savedData = savedData + ",";
+                savedData = savedData + blendShapeObjects[inspectorObjects[i].objectID].blendShapes[inspectorObjects[i].blendShapeID].name;
+                savedData = savedData + ",";
+
+                //int presetExportValue = blendShapeObjects[inspectorObjects[i].objectID].blendShapes[inspectorObjects[i].blendShapeID].presetExportValue;
+                //if (presetExportValue == 0)
+                //	savedData = savedData + "*";
+                //else 
+                if (presetExportValue == 1)
+                {
+                    var currentWeight = blendShapeObjects[inspectorObjects[i].objectID].renderer.GetBlendShapeWeight(inspectorObjects[i].blendShapeID);
+                    savedData = savedData + currentWeight;
+                }
+                else if (presetExportValue == 2)
+                    savedData = savedData + "R";
+            }
 		}
-		string presetPath = "Assets/SFBayStudios/Blendshape Preset Files/";
+		string presetPath = "Assets/InfinityPBR/Blendshape Preset Files/";
 		string fileName = "";
 		if (presetName == null || presetName == "")
 		{
@@ -468,16 +497,20 @@ public class SFB_BlendShapesManager : MonoBehaviour {
 	/// This is for editor use only.  To save players desired settings, best to use playerprefs or some other saving method.
 	/// </summary>
 	public void SFB_BS_ExportRanges(){
-		string savedData = "";
+		string savedData = "SFB_BlendShapesManager V2";
 		for (int i = 0; i < inspectorObjects.Count; i++){
-			if (i != 0) {
+			if (savedData != "") {
 				savedData = savedData + ",";
 			}
-			savedData = savedData + "" + blendShapeObjects[inspectorObjects[i].objectID].blendShapes[inspectorObjects[i].blendShapeID].minValue;
+            savedData = savedData + blendShapeObjects[inspectorObjects[i].objectID].name;
+            savedData = savedData + ",";
+            savedData = savedData + blendShapeObjects[inspectorObjects[i].objectID].blendShapes[inspectorObjects[i].blendShapeID].name;
+            savedData = savedData + ",";
+            savedData = savedData + "" + blendShapeObjects[inspectorObjects[i].objectID].blendShapes[inspectorObjects[i].blendShapeID].minValue;
 			savedData = savedData + ",";
 			savedData = savedData + "" + blendShapeObjects[inspectorObjects[i].objectID].blendShapes[inspectorObjects[i].blendShapeID].maxValue;
 		}
-		string presetPath = "Assets/SFBayStudios/Blendshape Preset Files/";
+		string presetPath = "Assets/InfinityPBR/Blendshape Preset Files/";
 		string fileName = this.name + " Range " + SFB_BS_GetNewFileNumber(presetPath, this.name + " Range ") + ".txt";
 		if (!Directory.Exists(presetPath))
 			System.IO.Directory.CreateDirectory(presetPath);
@@ -491,10 +524,29 @@ public class SFB_BlendShapesManager : MonoBehaviour {
 	public void SFB_BS_LoadRanges(TextAsset presetFile){
 		string contents = presetFile.text;
 		string[] shapesText = contents.Split(new string[] { "," }, System.StringSplitOptions.None);
-		for (int i = 0; i < inspectorObjects.Count; i++){
-			int shapeID = i * 2;
-			blendShapeObjects[inspectorObjects[i].objectID].blendShapes[inspectorObjects[i].blendShapeID].minValue = float.Parse(shapesText[shapeID]);
-			blendShapeObjects[inspectorObjects[i].objectID].blendShapes[inspectorObjects[i].blendShapeID].maxValue = float.Parse(shapesText[shapeID + 1]);
+		for (int i = 1; i < shapesText.Length; i++){
+            //Debug.Log("+0: " + shapesText[i]);
+            //Debug.Log("+1: " + shapesText[i + 1]);
+           //Debug.Log("+2: " + shapesText[i + 2]);
+            //Debug.Log("+3: " + shapesText[i + 3]);
+            int shapeID = i * 4;
+
+            int objectID = GetBlendShapeObjectIndex(shapesText[i]);
+            if (objectID != 999999)
+            {
+                int blendShapeID = GetBlendShapesIndex(objectID, shapesText[i + 1]);
+                if (blendShapeID != 999999)
+                {
+                    blendShapeObjects[objectID].blendShapes[blendShapeID].minValue = float.Parse(shapesText[i + 2]);
+                    blendShapeObjects[objectID].blendShapes[blendShapeID].maxValue = float.Parse(shapesText[i + 3]);
+
+                }
+            }
+
+
+            i++;
+            i++;
+            i++;
 		}
 	}
 
@@ -502,8 +554,49 @@ public class SFB_BlendShapesManager : MonoBehaviour {
 		string contents = presetFile.text;
 		string[] shapesText;
 		shapesText = contents.Split(new string[] { "," }, System.StringSplitOptions.None);
-		for (int i = 0; i < shapesText.Length; i++){
-			if (shapesText [i] != "*") {
+		for (int i = 1; i < shapesText.Length; i++){    // START AT 1, since index 0 is the version information
+           // Debug.Log("Processing Object " + shapesText[i] + ", Shape " + shapesText[i + 1] + ", Value " + shapesText[i + 2]);
+            int objectIndex = GetBlendShapeObjectIndex(shapesText[i]);
+            int shapeIndex = GetBlendShapesIndex(objectIndex, shapesText[i + 1]);
+
+            if (shapeIndex != 999999)
+            {
+                SFB_BlendShape blendShapeData = blendShapeObjects[objectIndex].blendShapes[shapeIndex];
+                if (shapesText[i + 2] == "R")
+                {
+                    SFB_BS_SetRandom(blendShapeData);
+                }
+                else
+                {
+                    float shapeValue = float.Parse(shapesText[i + 2]);
+                    blendShapeData.sliderValue = shapeValue;
+                    SetValue(objectIndex, shapeIndex, blendShapeData.id, shapeValue);
+
+                    if (blendShapeData.isPlus && GetMinusShapeObject(blendShapeData.name) != 999999)
+                    {
+                        int minusShapeObject = GetMinusShapeObject(blendShapeData.name);
+                        if (minusShapeObject != 999999)
+                        {
+                            int minusShapeID = GetMinusShapeID(blendShapeData.name);
+                            SFB_BlendShape minusShape = blendShapeObjects[minusShapeObject].blendShapes[minusShapeID];
+                            minusShape.sliderValue = -blendShapeData.sliderValue;
+                            SetValue(minusShapeObject, minusShapeID, minusShape.id, minusShape.sliderValue);
+                        }
+                    }
+                }
+
+                if (blendShapeData.isPlus)
+                {
+
+                }
+
+            }
+
+
+            i++;
+            i++;
+
+           /*if (shapesText [i] != "*") {
 				SFB_BlendShapeObject bsObject = blendShapeObjects [inspectorObjects [i].objectID];
 				if (bsObject.renderer.gameObject.activeSelf) {
 					SFB_BlendShape bsShape = bsObject.blendShapes[inspectorObjects[i].shapeID];
@@ -515,21 +608,55 @@ public class SFB_BlendShapesManager : MonoBehaviour {
 						bsShape.sliderValue	= shapeValue;
 					}
 				}
-			}
+			}*/
 		}
 	}
 
-	public void SFB_BS_ResetAll(){
+    public int GetBlendShapeObjectIndex(string name)
+    {
+        for (int i = 0; i < blendShapeObjects.Count; i++)
+        {
+            if (blendShapeObjects[i].name == name)
+            {
+                return i;
+            }
+        }
+        Debug.Log("Potential Issue: Didn't find an index for Blend Shape Object named " + name);
+        return 999999;
+    }
+
+    public int GetBlendShapesIndex(int objectIndex, string name)
+    {
+        for (int i = 0; i < blendShapeObjects[objectIndex].blendShapes.Count; i++)
+        {
+            if (blendShapeObjects[objectIndex].blendShapes[i].name == name)
+            {
+                return i;
+            }
+        }
+        Debug.Log("Potential Issue: Didn't find an index for Blend Shape named " + name);
+        return 999999;
+    }
+
+    public void GetBlendShapesIndex(string objectName, string name)
+    {
+        GetBlendShapesIndex(GetBlendShapeObjectIndex(objectName), name);
+    }
+
+    public void SFB_BS_ResetAll(){
 		for (int i = 0; i < inspectorObjects.Count; i++) {
 			SFB_BlendShapeObject bsObject = blendShapeObjects[inspectorObjects[i].objectID];
 			SFB_BlendShape bsShape = bsObject.blendShapes[inspectorObjects[i].shapeID];
 			SetValue(inspectorObjects[i].objectID, inspectorObjects[i].shapeID, inspectorObjects[i].shapeID, 0);
-			if (bsShape.isPlus) {
-				int minusShapeObject = GetMinusShapeObject (bsShape.name);
-				int minusShapeID = GetMinusShapeID (bsShape.name);
-				SFB_BlendShape minusShapeData = blendShapeObjects[minusShapeObject].blendShapes[minusShapeID];
-				minusShapeData.sliderValue = 0;
-				SetValue (minusShapeObject, minusShapeID, minusShapeData.id, 0);
+			if (bsShape.isPlus && GetMinusShapeObject(bsShape.name) != 999999) {
+                int minusShapeObject = GetMinusShapeObject (bsShape.name);
+                if (minusShapeObject != 999999)
+                {
+                    int minusShapeID = GetMinusShapeID (bsShape.name);
+                    SFB_BlendShape minusShapeData = blendShapeObjects[minusShapeObject].blendShapes[minusShapeID];
+                    minusShapeData.sliderValue = 0;
+                    SetValue(minusShapeObject, minusShapeID, minusShapeData.id, 0);
+                }
 			}
 			bsShape.sliderValue	= 0;
 		}
@@ -540,13 +667,16 @@ public class SFB_BlendShapesManager : MonoBehaviour {
 		for (int i = 0; i < bsObject.blendShapes.Count; i++){
 			SFB_BlendShape bsShape = bsObject.blendShapes [i];
 			SetValue (objectID, i, i, 0);
-			if (bsShape.isPlus) {
+			if (bsShape.isPlus && GetMinusShapeObject(bsShape.name) != 999999) {
 				int minusShapeObject = GetMinusShapeObject(bsShape.name);
-				int minusShapeID = GetMinusShapeID(bsShape.name);
-				SFB_BlendShape minusShapeData = blendShapeObjects[minusShapeObject].blendShapes[minusShapeID];
-				minusShapeData.sliderValue = 0;
-				SetValue (minusShapeObject, minusShapeID, minusShapeData.id, 0);
-			}
+                if (minusShapeObject != 999999)
+                { 
+                  int minusShapeID = GetMinusShapeID(bsShape.name);
+                    SFB_BlendShape minusShapeData = blendShapeObjects[minusShapeObject].blendShapes[minusShapeID];
+                    minusShapeData.sliderValue = 0;
+                    SetValue(minusShapeObject, minusShapeID, minusShapeData.id, 0);
+                }
+            }
 			bsShape.sliderValue = 0;
 		}
 	}

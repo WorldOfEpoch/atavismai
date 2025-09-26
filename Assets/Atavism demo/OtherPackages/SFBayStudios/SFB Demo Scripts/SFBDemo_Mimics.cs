@@ -32,7 +32,9 @@ public class SFBDemo_Mimics : MonoBehaviour {
 	/// <summary>
 	/// Starts the cast particles
 	/// </summary>
-	public void StartWarmup(){
+	public void StartWarmup()
+	{
+		//Debug.Log("Start Warmup");
 		for (int i = 0; i < castWarmup.Length; i++){			// For each castWarmup particle
 			castWarmup [i].Play ();								// Play()
 		}
@@ -41,7 +43,9 @@ public class SFBDemo_Mimics : MonoBehaviour {
 	/// <summary>
 	/// Stops the Warmup and starts the Cast particles
 	/// </summary>
-	public void StartCast(){
+	public void StartCast()
+	{
+		//Debug.Log("Start Cast");
 		for (int i = 0; i < castWarmup.Length; i++){			// For each castWarmup particle
 			castWarmup [i].Stop ();								// Stop()
 		}

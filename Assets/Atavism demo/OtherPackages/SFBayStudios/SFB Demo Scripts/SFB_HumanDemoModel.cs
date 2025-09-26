@@ -46,7 +46,8 @@ public class SFB_HumanDemoModel : MonoBehaviour {
 	}
 
 	public void CastGeneric1(){
-		GameObject newSpell = Instantiate(particleGeneric1, positionGeneric1.transform.position, positionGeneric1.transform.rotation);
+		GameObject newSpell = Instantiate(particleGeneric1, positionGeneric1.transform.position, Quaternion.identity);
+		newSpell.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
 		Destroy(newSpell, 5.0f);
 	}
 
@@ -87,7 +88,7 @@ public class SFB_HumanDemoModel : MonoBehaviour {
 	}
 
 	public void StartCastBarbarian1(){
-		InvokeRepeating("CastBarbarian1", 0.0f, 0.7f);
+		InvokeRepeating("CastBarbarian1", 0.0f, 1.2f);
 	}
 
 	public void StopCastBarbarian1(){
@@ -95,8 +96,12 @@ public class SFB_HumanDemoModel : MonoBehaviour {
 	}
 
 	public void CastBarbarian1(){
-		GameObject newSpell = Instantiate(particleBarbarian1, positionBarbarian1.transform.position, positionBarbarian1.transform.rotation);
-		Destroy(newSpell, 5.0f);
+		//GameObject newSpell = Instantiate(particleBarbarian1, positionBarbarian1.transform.position, positionBarbarian1.transform.rotation);
+		//Destroy(newSpell, 5.0f);
+		
+		GameObject newSpell = Instantiate(particleBarbarian1, positionBarbarian1.transform.position, Quaternion.identity);
+		newSpell.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+		Destroy (newSpell, 7.0f);
 	}
 
 }
